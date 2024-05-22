@@ -7,18 +7,23 @@ import Image from "next/image";
 import images from "@/images";
 import { Button } from "@/components/componentsindex";
 import { DropZone } from "./uploadNFTIndex";
+import Router, { useRouter } from "next/router";
 
 
 
-export const UploadNFT = () => {
+export const UploadNFT = ({ uploadToPinata, createNFT }) => {
     const [active, setActive] = useState(0);
-    const [itemName, setItemName] = useState("");
+    const [name, setName] = useState("");
     const [website, setWebsite] = useState("");
     const [description, setDescription] = useState("");
     const [royalties, setRoyalties] = useState("");
     const [fileSize, setFileSize] = useState("");
     const [category, setCategory] = useState(0);
     const [properties, setProperties] = useState("");
+    const [price, setPrice] = useState("");
+    const [image, setImage] = useState(null);
+
+    const router = useRouter();
   
     const categoryArry = [
       {
@@ -53,14 +58,15 @@ export const UploadNFT = () => {
           title="JPG, PNG, WEBM , MAX 100MB"
           heading="Drag & drop file"
           subHeading="or Browse media on your device"
-          itemName={itemName}
+          name={name}
           website={website}
           description={description}
           royalties={royalties}
           fileSize={fileSize}
           category={category}
           properties={properties}
-          image={images.upload}
+          setImage={setImage}
+          uploadToPinata={uploadToPinata}
         />
   
         <div className="{Style.upload_box}">
@@ -70,7 +76,7 @@ export const UploadNFT = () => {
               type="text"
               placeholder="Item Name"
               className="w-full border-[1px] border-solid border-icons-color p-[1rem] rounded-[1rem] bg-[transparent] mt-[0.5rem] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color"
-              onChange={(e) => setItemName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
   
@@ -191,12 +197,33 @@ export const UploadNFT = () => {
                 />
               </div>
             </div>
+
+            <div className="mt-[2rem]">
+              <label className="block w-ful ml-[1rem] font-bold text-[1.3rem]" htmlFor="Price">Price</label>
+              <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
+                <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
+                  <AiTwotonePropertySafety />
+                </div>
+                <input
+                    className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color"
+                    type="text"
+                    placeholder="Price"
+                    onChange={(e) => setPrice(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
   
           <div className="grid grid-cols-2 my-[4rem] gap-[2rem]">
             <Button
               btnName="Upload"
-              handleClick={() => {}}
+              handleClick={async() => createNFT(
+                name,
+                price,
+                image,
+                description,
+                router
+              )}
               classStyle="w-full grid self-center text-[1.3rem]"
             />
             <Button

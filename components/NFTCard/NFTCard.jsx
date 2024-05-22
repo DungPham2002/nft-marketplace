@@ -32,7 +32,7 @@ export const NFTCard = () => {
       {featureArray.map((el, i) => (
         <div className="p-[1rem] bg-shadow-light rounded-[1rem] grid grid-cols-4 grid-rows-4 cursor-pointer transition-all ease-in hover:shadow-shadow-1 group" key={i + 1}>
           <div className="col-start-1 col-end-[-1] row-start-1 row-end-[-1] overflow-hidden rounded-[1rem]">
-            <Image
+            <img
               src={el}
               alt="NFT images"
               width={600}

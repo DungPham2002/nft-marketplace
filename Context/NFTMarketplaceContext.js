@@ -46,7 +46,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       } else {
         console.log("No account found");
       };
-      console.log(currentAccount);
+      // console.log(currentAccount);
     } catch (error) {
       console.log("Something wrong when connecting wallet");
     }
@@ -63,7 +63,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         method: "eth_requestAccounts",
       });
       setCurrentAccount(accounts[0]);
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -131,7 +131,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
             value: listingPrice.toString(),
           });
       await transaction.wait();
-      console.log(transaction);
+      router.push('search')
+      // console.log(transaction);
     } catch (error) {
       console.log("Error when creating sale", error);
     }
@@ -140,11 +141,10 @@ export const NFTMarketplaceProvider = ({ children }) => {
   const fetchNFTs = async () => {
     try {
       const provider = new ethers.providers.JsonRpcProvider();
-      const contract = new ethers.Contract(provider);
+      const contract = fetchContract(provider);
       const data = await contract.fetchMarketItem();
       const items = await Promise.all(
-        data.map(async (i) => {
-          async ({ tokenId, seller, owner, price: unformattedPrice }) => {
+        data.map(async ({ tokenId, seller, owner, price: unformattedPrice }) => {
             const tokenURI = await contract.tokenURI(tokenId);
             const {
               data: { image, name, description },
@@ -164,7 +164,6 @@ export const NFTMarketplaceProvider = ({ children }) => {
               description,
               tokenURI,
             };
-          };
         })
       );
       return items;

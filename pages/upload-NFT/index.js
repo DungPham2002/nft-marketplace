@@ -1,7 +1,10 @@
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import { UploadNFT } from "@/domain/uploadNFTPage/uploadNFTIndex";
+import { useContext } from "react";
 
 
-export default function uploadNFT() {
+export default function uploadNFTPage() {
+    const { uploadToPinata, createNFT } = useContext(NFTMarketplaceContext);
     return (
         <div className="w-full my-[8rem]">
             <div className="w-[60%] my-0 mx-auto">
@@ -22,7 +25,7 @@ export default function uploadNFT() {
                 </div>
         
                 <div className="{Style.uploadNFT_box_form}">
-                    <UploadNFT />
+                    <UploadNFT uploadToPinata={uploadToPinata} createNFT={createNFT}/>
                 </div>
             </div>
         </div>

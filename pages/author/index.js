@@ -5,7 +5,7 @@ import { FollowerTabCard } from "@/components/FollowerTab/FollowerTabCard/Follow
 import images from "@/images";
 import { useState } from "react";
 
-export default function author() {
+export default function authorPage() {
     const followerArray = [
       {
         background: images.creatorbackground1,

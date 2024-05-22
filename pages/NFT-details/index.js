@@ -1,6 +1,6 @@
 import { Category, Brand } from "@/components/componentsindex";
 import { NFTDetailsPage } from "@/domain/NFTDetailsPage/NFTDetailsPage";
-export default function NFTDetails() {
+export default function NFTDetailsPage() {
   return (
     <div>
       <NFTDetailsPage />

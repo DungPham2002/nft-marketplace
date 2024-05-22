@@ -4,7 +4,7 @@ import images from "@/images";
 
 
 
-export default function connectWallet() {
+export default function connectWalletPage() {
     const [activeBtn, setActiveBtn] = useState(1);
     const providerArray = [
       {

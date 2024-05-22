@@ -38,7 +38,7 @@ export const NFTCardTwo = ({ NFTData }) => {
 
             <div className="col-start-1 col-end-[-1] row-start-1 row-end-[-1]">
                 <Image
-                src={el}
+                src={el.image}
                 alt="NFT"
                 width={500}
                 height={500}
@@ -49,7 +49,7 @@ export const NFTCardTwo = ({ NFTData }) => {
             <div className="flex justify-between p-[1rem]">
                 <div className="{Style.NFTCardTwo_box_info_left}">
                 <LikeProfile />
-                <p className="text-[2rem] font-black">Clone #{i + 1}</p>
+                <p className="text-[2rem] font-black">{el.name}</p>
                 </div>
                 <small className="text-[1rem]">4{i + 2}</small>
             </div>
@@ -57,7 +57,7 @@ export const NFTCardTwo = ({ NFTData }) => {
             <div className="flex justify-between items-end p-[1rem]">
                 <div className="{Style.NFTCardTwo_box_price_box}">
                 <small className="ml-[1rem] rounded-[0.3rem] p-[1rem] text-main-bg bg-icons-color">Current Bid</small>
-                <p className="rounded-[0.3rem] text-[1.1rem] pt-[1rem] px-[1rem] pb-[0.5rem] border-[1px] border-solid border-icons-color">1{i + 5}.000 ETH</p>
+                <p className="rounded-[0.3rem] text-[1.1rem] pt-[1rem] px-[1rem] pb-[0.5rem] border-[1px] border-solid border-icons-color">{el.price} ETH</p>
                 </div>
                 <p className="flex items-center gap-[0.5rem] text-[1.1rem]">
                 <MdTimer /> <span className="">{i + 1} hours left</span>
