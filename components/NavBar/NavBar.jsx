@@ -1,5 +1,5 @@
 import images from "@/images";
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { BsSearch } from "react-icons/bs";
 import { Discover } from "./Discover/Discover";
 import { HelpCenter } from "./HelpCenter/HelpCenter";
@@ -10,6 +10,8 @@ import { Profile } from "./Profile/Profile";
 import { SideBar } from "./SideBar/SideBar";
 import Image from "next/image";
 import { CgMenuLeft, CgMenuRight } from "react-icons/cg";
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
+import Link from "next/link";
 
 export const NavBar = () => {
     //USESTATE COMPONNTS
@@ -90,6 +92,8 @@ export const NavBar = () => {
         setOpenSideBarMenu(false);
       }
     };
+
+    const { currentAccount, connectWallet } = useContext(NFTMarketplaceContext);
   
     return (
       <div className="w-full z-[11111] p-6 relative">
@@ -145,7 +149,13 @@ export const NavBar = () => {
   
             {/* CREATE BUTTON SECTION */}
             <div className="relative cursor-pointer max-[768px]:hidden">
-              <Button btnName="Create" handleClick={() => {}} />
+              {currentAccount == "" ? (
+                <Button btnName="Connect" handleClick={() => connectWallet()}/>
+              ) : (
+                <a href="upload-NFT">
+                  <Button btnName="Create" handleClick={() => {}} />
+                </a>
+              )}
             </div>
   
             {/* USER PROFILE */}

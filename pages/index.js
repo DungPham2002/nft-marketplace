@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { HeroSection } from "@/components/HeroSection/HeroSection";
 import { BigNFTSlider, Service, Subscribe, Title, Category, Filter, NFTCard, Collection, FollowerTab, Slider, Brand, Video } from "@/components/componentsindex";
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 
-export default function Home() {
+export default function Home() {  
+  const { checkIfWalletConnected } = useContext(NFTMarketplaceContext);
+  useEffect(() => {
+    checkIfWalletConnected()
+  }, []);
   return (
     <div className="">
       <HeroSection />
