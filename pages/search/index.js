@@ -5,7 +5,7 @@ import images from "@/images";
 import { useContext, useEffect, useState } from "react";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 
-export default function SearchPage() {
+export default function Search() {
     const { fetchNFTs } = useContext(NFTMarketplaceContext);
     const [nfts, setNfts] = useState([]);
     const [nftCoppy, setNftCoppy] = useState([]);
@@ -15,7 +15,7 @@ export default function SearchPage() {
             setNfts(item.reverse());
             setNftCoppy(item);
         });
-    });
+    }, []);
 
     const onHandleSearch = (value) => {
         const filteredNFTS = nfts.filter(({ name }) => 

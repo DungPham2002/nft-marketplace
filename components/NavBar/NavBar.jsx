@@ -12,6 +12,7 @@ import Image from "next/image";
 import { CgMenuLeft, CgMenuRight } from "react-icons/cg";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export const NavBar = () => {
     //USESTATE COMPONNTS
@@ -20,6 +21,7 @@ export const NavBar = () => {
     const [notification, setNotification] = useState(false);
     const [profile, setProfile] = useState(false);
     const [openSideBarMenu, setOpenSideBarMenu] = useState(false);
+    const router = useRouter();
   
     // const openMenu = (e) => {
     //   const btnText = e.target.innerText;
@@ -106,6 +108,7 @@ export const NavBar = () => {
                 width={100}
                 height={100}
                 className=""
+                onClick={() => router.push("/")}
               />
             </div>
             <div className="">
@@ -152,9 +155,7 @@ export const NavBar = () => {
               {currentAccount == "" ? (
                 <Button btnName="Connect" handleClick={() => connectWallet()}/>
               ) : (
-                <a href="upload-NFT">
-                  <Button btnName="Create" handleClick={() => {}} />
-                </a>
+                <Button btnName="Create" handleClick={() => router.push("upload-NFT")} />
               )}
             </div>
   
@@ -170,7 +171,7 @@ export const NavBar = () => {
                   onClick={() => openProfile()}
                   className="rounded-[50%] h-[40px] w-[40px]" />
   
-                {profile && <Profile />}
+                {profile && <Profile currentAccount={currentAccount}/>}
               </div>
             </div>
   

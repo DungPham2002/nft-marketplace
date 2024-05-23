@@ -5,7 +5,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import images from "@/images";
 
-export const NFTDetailsImg = () => {
+export const NFTDetailsImg = ({nft}) => {
   const [description, setDescription] = useState(true);
   const [details, setDetails] = useState(true);
   const [like, setLike] = useState(false);
@@ -55,7 +55,7 @@ export const NFTDetailsImg = () => {
 
           <div className="col-start-1 col-end-[-1] row-start-1 row-end-12">
             <Image
-              src={images.nft_image_1}
+              src={nft.image}
               className="rounded-[1rem] object-cover"
               alt="NFT image"
               width={700}
@@ -75,10 +75,7 @@ export const NFTDetailsImg = () => {
         {description && (
           <div className="pt-[1rem] px-[1rem] text-[1rem]">
             <p>
-              Tattooed Kitty Gang (“TKG”) is a collection of 666 badass kitty
-              gangsters, with symbol of tattoos, living in the Proud Kitty Gang
-              (“PKG”) metaverse. Each TKG is an 1/1 ID as gangster member & all
-              the joint rights.
+              {nft.description}
             </p>
           </div>
         )}
@@ -97,11 +94,12 @@ export const NFTDetailsImg = () => {
             <p className="text-[1rem] py-[1rem]">
               <small className="text-[1rem]">Contract Address</small>
               <br></br>
-              0x50f5474724e0ee42d9a4e711ccfb275809fd6d4a
+              <span className="text-[1rem]">{nft.contractAddress}</span>
+                {nft.seller}
             </p>
             <p className="text-[1rem]">
               <small className="text-[1rem]">Token ID</small>
-              100300372864
+                &nbsp; {nft.tokenId}
             </p>
           </div>
         )}

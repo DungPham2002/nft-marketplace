@@ -16,7 +16,7 @@ import { BsThreeDots } from "react-icons/bs";
 import images from "@/images";
 import { Button } from "@/components/componentsindex";
 
-export const AuthorProfileCard = () => {
+export const AuthorProfileCard = ({currentAccount}) => {
     const [share, setShare] = useState(false);
     const [report, setReport] = useState(false);
 
@@ -71,7 +71,7 @@ export const AuthorProfileCard = () => {
                         <input
                             className="w-[38%] outline-none text-[1rem] border-none bg-[transparent] font-bold"
                             type="text"
-                            value="0x829BD824B03D092293333..A830"
+                            value={currentAccount}
                             id="myInput"
                         />
                         <FiCopy

@@ -112,7 +112,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
       const url = `https://beige-necessary-lobster-645.mypinata.cloud/ipfs/${response.data.IpfsHash}`;
       await createSale(url, price);
-      // router.push("/search");
+      router.push("/search");
     } catch (error) {
       console.log(error);
     }
@@ -131,8 +131,6 @@ export const NFTMarketplaceProvider = ({ children }) => {
             value: listingPrice.toString(),
           });
       await transaction.wait();
-      router.push('search')
-      // console.log(transaction);
     } catch (error) {
       console.log("Error when creating sale", error);
     }
@@ -142,7 +140,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
     try {
       const provider = new ethers.providers.JsonRpcProvider();
       const contract = fetchContract(provider);
-      const data = await contract.fetchMarketItem();
+      const data = await contract.fetchMarketItems();
       const items = await Promise.all(
         data.map(async ({ tokenId, seller, owner, price: unformattedPrice }) => {
             const tokenURI = await contract.tokenURI(tokenId);
@@ -176,13 +174,13 @@ export const NFTMarketplaceProvider = ({ children }) => {
     fetchNFTs();
   }, []);
 
-  const fetchMyNFTsorListedNFTs = async () => {
+  const fetchMyNFTsorListedNFTs = async (type) => {
     try {
       const contract = await connectingWithSmartContract();
       const data =
-        type == "fetchItemsListed"
+        type === "fetchItemsListed"
           ? await contract.fetchItemsListed()
-          : await contract.fetchMyNFT();
+          : await contract.fetchMyNFTs();
       const items = await Promise.all(
         data.map(
           async ({ tokenId, seller, owner, price: unformattedPrice }) => {
@@ -195,6 +193,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
               "ether"
             );
             return {
+              name,
               price,
               tokenId: tokenId.toNumber(),
               seller,
@@ -206,10 +205,15 @@ export const NFTMarketplaceProvider = ({ children }) => {
           }
         )
       );
+      return items;
     } catch (error) {
-      console.log("Error when listing NFTs");
+      console.log("Error when listing NFTs", error);
     }
   };
+
+  useEffect(() => {
+    fetchMyNFTsorListedNFTs();
+  }, []);
 
   const buyNFT = async (nft) => {
     try {
@@ -218,6 +222,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
       const transaction = await contract.createMarketSale(nft.tokenId, {
         value: price,
       });
+
+      await transaction.wait();
+      router.push("/author")
     } catch (error) {
       console.log("Error when buying NFT");
     }
@@ -232,6 +239,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         uploadToPinata,
         createNFT,
         fetchNFTs,
+        createSale,
         fetchMyNFTsorListedNFTs,
         buyNFT,
         currentAccount,

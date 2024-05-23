@@ -3,7 +3,7 @@ import { UploadNFT } from "@/domain/uploadNFTPage/uploadNFTIndex";
 import { useContext } from "react";
 
 
-export default function uploadNFTPage() {
+export default function uploadNFT() {
     const { uploadToPinata, createNFT } = useContext(NFTMarketplaceContext);
     return (
         <div className="w-full my-[8rem]">

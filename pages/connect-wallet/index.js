@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import images from "@/images";
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 
 
 
 export default function connectWalletPage() {
+    const { currentAccount, connectWallet } = useContext(NFTMarketplaceContext);
     const [activeBtn, setActiveBtn] = useState(1);
     const providerArray = [
       {
@@ -31,7 +33,7 @@ export default function connectWalletPage() {
                   activeBtn == i + 1 ? "shadow-shadow" : ""
                 }`}
                 key={i + 1}
-                onClick={() => setActiveBtn(i + 1)}
+                onClick={() => (setActiveBtn(i + 1), connectWallet())}
               >
                 <Image
                   src={el.provider}

@@ -5,7 +5,7 @@ import { FaUserAlt, FaRegImage, FaUserEdit } from "react-icons/fa";
 import { MdHelpCenter } from "react-icons/md";
 import { TbDownload } from "react-icons/tb";
 
-export const Profile = () => {
+export const Profile = ({currentAccount}) => {
     return (
         <div className="absolute py-[2rem] px-[0.5rem] shadow-shadow text-[1rem] w-[20rem] rounded-[1rem] left-[-17rem] top-[4.5rem] z-[22222] bg-main-bg">
             <div className="flex items-center gap-[2rem] p-[1.5rem]">
@@ -18,7 +18,7 @@ export const Profile = () => {
                 />
                 <div className="leading-2">
                     <p className="font-semibold">Van Anh</p>
-                    <small className="mt-[1rem]">x0231283681263821</small>
+                    <small className="mt-[1rem]">{currentAccount.slice(0, 20)}...</small>
                 </div>
             </div>
 
@@ -27,19 +27,19 @@ export const Profile = () => {
                     <div className="flex items-center gap-[2rem] py-[1rem] px-[1.5rem] ease-in transition-all hover:bg-icons-color hover:text-shadow-dark rounded-[0.3rem]">
                         <FaUserAlt />
                         <p>
-                            <Link href={{ pathname: '/my-items' }}>My Items</Link>
+                            <Link href={{ pathname: '/author' }}>My Profile</Link>
                         </p>
                     </div>
                     <div className="flex items-center gap-[2rem] py-[1rem] px-[1.5rem] ease-in transition-all hover:bg-icons-color hover:text-shadow-dark rounded-[0.3rem]">
                         <FaRegImage />
                         <p>
-                            <Link href={{ pathname: '/my-items' }}>My Items</Link>
+                            <Link href={{ pathname: '/author' }}>My Items</Link>
                         </p>
                     </div>
                     <div className="flex items-center gap-[2rem] py-[1rem] px-[1.5rem] ease-in transition-all hover:bg-icons-color hover:text-shadow-dark rounded-[0.3rem]">
                         <FaUserEdit />
                         <p>
-                            <Link href={{ pathname: '/edit-profile' }}>Edit Profile</Link>
+                            <Link href={{ pathname: '/account' }}>Edit Profile</Link>
                         </p>
                     </div>
                 </div>
@@ -48,13 +48,13 @@ export const Profile = () => {
                     <div className="flex items-center gap-[2rem] py-[1rem] px-[1.5rem] ease-in transition-all hover:bg-icons-color hover:text-shadow-dark rounded-[0.3rem]">
                         <MdHelpCenter />
                         <p>
-                            <Link href={{ pathname: '/help' }}>Help</Link>
+                            <Link href={{ pathname: '/contact-us' }}>Help</Link>
                         </p>
                     </div>
                     <div className="flex items-center gap-[2rem] py-[1rem] px-[1.5rem] ease-in transition-all hover:bg-icons-color hover:text-shadow-dark rounded-[0.3rem]">
                         <TbDownload />
                         <p>
-                            <Link href={{ pathname: '/disconnect' }}>Disconnect</Link>
+                            <Link href={{ pathname: '/about-us' }}>About Ua</Link>
                         </p>
                     </div>
                 </div>

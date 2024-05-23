@@ -18,18 +18,24 @@ import {
 import { BiTransferAlt, BiDollar } from "react-icons/bi";
 import images from "@/images";
 import { Button } from "@/components/componentsindex";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NFTTabs } from "../NFTTabs/NFTTabs";
+import Link from "next/link";
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
+import { useRouter } from "next/router";
 
 
 
-export const NFTDescription = () => {
+export const NFTDescription = ({nft}) => {
     const [social, setSocial] = useState(false);
     const [NFTMenu, setNFTMenu] = useState(false);
     const [history, setHistory] = useState(true);
     const [provanance, setProvanance] = useState(false);
     const [owner, setOwner] = useState(false);
-  
+
+    const { currentAccount, buyNFT } = useContext(NFTMarketplaceContext);
+    const router = useRouter();
+
     const historyArray = [
       images.user1,
       images.user2,
@@ -151,7 +157,7 @@ export const NFTDescription = () => {
           </div>
           {/* //Part TWO */}
           <div className="{Style.NFTDescription_box_profile}">
-            <h1 className="text-[3.2rem]">BearX #23453</h1>
+            <h1 className="text-[3.2rem]">{nft.name} #{nft.tokenId}</h1>
             <div className="flex items-center gap-[2rem] pb-[1.5rem]">
               <div className="flex items-center self-center gap-[1rem]">
                 <Image
@@ -162,16 +168,18 @@ export const NFTDescription = () => {
                   className="rounded-[50%] w-[40px] h-[40px]"
                 />
                 <div className="{Style.NFTDescription_box_profile_box_left_info}">
-                  <small className="font-medium">Creator</small> <br />
-                  <span className="font-extrabold flex items-center">
-                    Karli Costa <MdVerified className="ml-[0.2rem]"/>
-                  </span>
+                  <small className="font-medium text-[1rem]">Creator</small> <br />
+                  <Link href={{ pathname: "/author", query: `${nft.seller}` }}>
+                    <span className="font-extrabold flex items-center">
+                      Karli Costa <MdVerified className="ml-[0.2rem]"/>
+                    </span>
+                  </Link>
                 </div>
               </div>
   
               <div className="flex items-center gap-[1rem] border-l-[1px] border-solid border-icons-color pl-[2rem]">
                 <Image
-                  src={images.user2}
+                  src={images.creatorbackground1}
                   alt="profile"
                   width={40}
                   height={40}
@@ -179,9 +187,9 @@ export const NFTDescription = () => {
                 />
   
                 <div className="{Style.NFTDescription_box_profile_box_right_info}">
-                  <small className="font-medium">Creator</small> <br />
+                  <small className="font-medium text-[1rem]">Collection</small> <br />
                   <span className="font-extrabold flex items-center">
-                    Karli Costa <MdVerified className="ml-[0.2rem]"/>
+                    HIHIHI <MdVerified className="ml-[0.2rem]"/>
                   </span>
                 </div>
               </div>
@@ -233,7 +241,7 @@ export const NFTDescription = () => {
                 >
                   <small className="text-[1.2rem] bg-icons-color text-main-bg p-[1rem] rounded-[0.5rem] ml-[2rem]">Current Bid</small>
                   <p className="p-[1rem] text-[1.5rem] font-black">
-                    1.000 ETH <span>( ≈ $3,221.22)</span>
+                    {nft.price} ETH <span>( ≈ $3,221.22)</span>
                   </p>
                 </div>
   
@@ -241,12 +249,26 @@ export const NFTDescription = () => {
               </div>
   
               <div className="flex mt-[2rem] gap-[4rem]">
-                <Button
+                {currentAccount == nft.seller.toLowerCase() ? (
+                  <p className="items-center flex">
+                    You cannot buy your own NFT
+                  </p>
+                ) : currentAccount == nft.owner.toLowerCase() ? (
+                  <Button
                   icon={<FaWallet className="mr-[0.5rem]"/>}
-                  btnName="Place a bid"
-                  handleClick={() => {}}
-                  classStyle="{Style.button} flex items-center"
+                  btnName="List on Market"
+                  handleClick={() => router.push(`/resellToken?id=${nft.tokenId}&tokenURI=${nft.tokenURI}`)}
+
+                  classStyle="flex items-center"
                 />
+                ) : (
+                  <Button
+                  icon={<FaWallet className="mr-[0.5rem]"/>}
+                  btnName="Buy NFT"
+                  handleClick={() => buyNFT(nft)}
+                  classStyle="flex items-center"
+                />
+                )}
                 <Button
                   icon={<FaPercentage className="mr-[0.5rem]"/>}
                   btnName="Make offer"

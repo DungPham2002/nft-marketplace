@@ -4,7 +4,7 @@ import { Banner, CollectionProfile, NFTCardTwo } from "@/domain/collectionPage/c
 import images from "@/images";
 
 
-export default function CollectionPage() {
+export default function Collection() {
   const collectionArray = [
     images.nft_image_1,
     images.nft_image_2,

@@ -33,14 +33,14 @@ export const AuthorTabs = ({
 
   const openTab = (e) => {
     const btnText = e.target.innerText;
-    if (btnText == "Collectiables") {
+    if (btnText == "Listed NFT") {
       setCollectiables(true);
       setCreated(false);
       setFollower(false);
       setFollowing(false);
       setLike(false);
       setActiveBtn(1);
-    } else if (btnText == "Created") {
+    } else if (btnText == "Own NFT") {
       setCollectiables(false);
       setCreated(true);
       setFollower(false);
@@ -80,14 +80,14 @@ export const AuthorTabs = ({
               className={`${activeBtn == 1 ? activeClass : ""} ${buttonClass}`}
               onClick={(e) => openTab(e)}
             >
-              Collectiables
+              Listed NFT
             </button>
             <button
               className={`${activeBtn == 2 ? activeClass : ""} ${buttonClass}`}
 
               onClick={(e) => openTab(e)}
             >
-              Created
+              Own NFT
             </button>
             <button
               className={`${activeBtn == 3 ? activeClass : ""} ${buttonClass}`}
