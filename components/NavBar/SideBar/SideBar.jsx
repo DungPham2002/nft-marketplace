@@ -55,15 +55,15 @@ export const SideBar = ({setOpenSideBarMenu}) => {
         },
         {
             name: "Sign Up",
-            link: "Sign-up"
+            link: "signUp"
         },
         {
-            name: "Sign In",
-            link: "Sign-in"
+            name: "Log in",
+            link: "login"
         },
         {
-            name: "Register",
-            link: "register"
+            name: "Forgot password",
+            link: "forgot-password"
         },
     ];
 

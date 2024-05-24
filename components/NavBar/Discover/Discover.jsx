@@ -31,8 +31,8 @@ export const Discover = () => {
             link: "connect-wallet"
         },
         {
-            name: "Blog",
-            link: "blog"
+            name: "Transfer",
+            link: "transfer"
         },
     ]
     return (

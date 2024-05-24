@@ -5,7 +5,7 @@ import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import { getTopCreators } from "@/services/getTopCreators";
 
 export default function Home() {  
-  const { checkIfWalletConnected } = useContext(NFTMarketplaceContext);
+  const { checkIfWalletConnected, currentAccount } = useContext(NFTMarketplaceContext);
   useEffect(() => {
     checkIfWalletConnected()
   }, []);
@@ -18,10 +18,12 @@ export default function Home() {
 
 
   useEffect(() => {
+    if (currentAccount) {
       fetchNFTs().then((item) => {
-          setNfts(item.reverse());
-          setNftCoppy(item);
-      });
+        setNfts(item.reverse());
+        setNftCoppy(item);
+    });
+    }
   }, []);
   return (
     <div className="">

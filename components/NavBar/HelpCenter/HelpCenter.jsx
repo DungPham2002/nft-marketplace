@@ -12,15 +12,15 @@ export const HelpCenter = () => {
         },
         {
             name: "Sign Up",
-            link: "Sign-up"
+            link: "signUp"
         },
         {
-            name: "Sign In",
-            link: "Sign-in"
+            name: "Log In",
+            link: "login"
         },
         {
-            name: "Register",
-            link: "register"
+            name: "Forgot password",
+            link: "forgot-password"
         },
     ]
     return (
