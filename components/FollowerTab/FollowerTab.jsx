@@ -47,48 +47,59 @@ export const FollowerTab = ({TopCreator}) => {
     {
       background: images.creatorbackground1,
       user: images.user1,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
     },
     {
       background: images.creatorbackground2,
       user: images.user2,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
     },
     {
       background: images.creatorbackground3,
       user: images.user3,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
     },
     {
       background: images.creatorbackground4,
       user: images.user4,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     },
     {
       background: images.creatorbackground5,
       user: images.user5,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     },
     {
       background: images.creatorbackground6,
       user: images.user6,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     },
   ];
   const NewsArray = [
     {
       background: images.creatorbackground1,
       user: images.user1,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     },
     {
       background: images.creatorbackground2,
       user: images.user2,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     },
     {
       background: images.creatorbackground3,
       user: images.user3,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     },
     {
       background: images.creatorbackground4,
       user: images.user4,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     },
     {
       background: images.creatorbackground5,
       user: images.user5,
+      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
     }
   ];
 

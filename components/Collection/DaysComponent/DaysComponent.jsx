@@ -54,10 +54,10 @@ export const DaysComponent = ({el, i}) => {
 
               <p className="flex">
                 Creator
-                <span className="px-[0.5rem] font-semibold flex">
+                <span className="px-[0.5rem] font-semibold flex items-center">
                   Shoaib Bhai
                   <small>
-                    <MdVerified />
+                    <MdVerified className="ml-[0.2rem]"/>
                   </small>
                 </span>
               </p>

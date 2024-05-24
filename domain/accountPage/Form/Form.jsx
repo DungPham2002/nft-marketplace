@@ -57,13 +57,13 @@ export const Form = () => {
 
                 <div className="grid grid-cols-3 gap-[1rem]">
                     <div className="mt-[2rem]">
-                    <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="facebook">Facebook</label>
-                    <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
-                        <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
-                        <TiSocialFacebook />
+                        <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="facebook">Facebook</label>
+                        <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
+                            <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
+                            <TiSocialFacebook />
+                            </div>
+                            <input className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" type="text" placeholder="http://shoaib" />
                         </div>
-                        <input className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" type="text" placeholder="http://shoaib" />
-                    </div>
                     </div>
                     <div className="mt-[2rem]">
                     <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="Twitter">Twitter</label>

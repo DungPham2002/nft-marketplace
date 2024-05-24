@@ -1,6 +1,6 @@
 import Router, { useRouter } from "next/router";
 import { ethers } from "ethers";
-import { NFTMarketplaceAdrress, NFTMarketplaceABI } from "./constants";
+import { NFTMarketplaceAdrress, NFTMarketplaceABI, TransferAddress, TransferABI } from "./constants";
 import React, { Children, useEffect, useState } from "react";
 import axios from "axios";
 import Web3Modal from "web3modal";
@@ -27,12 +27,34 @@ const connectingWithSmartContract = async () => {
   }
 };
 
+
+const fetchTransferContract = (signerOrProvider) =>
+  new ethers.Contract(
+    TransferAddress,
+    TransferABI,
+    signerOrProvider
+  );
+
+const connectToTransfer = async () => {
+  try {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const contract = fetchTransferContract(signer);
+    return contract;
+  } catch (error) {
+    console.log("Error when connecting transfer contract");
+  }
+};
+
 export const NFTMarketplaceContext = React.createContext();
 
 export const NFTMarketplaceProvider = ({ children }) => {
   const titleData = "Discover, collect, and sell NFTs";
 
   const [currentAccount, setCurrentAccount] = useState("");
+  const [accountBalance, setAccountBalance] = useState("");
   const router = useRouter();
 
   const checkIfWalletConnected = async () => {
@@ -46,7 +68,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
       } else {
         console.log("No account found");
       };
-      // console.log(currentAccount);
+      
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const getBalance = await provider.getBalance(accounts[0]);
+      const bal = ethers.utils.formatEther(getBalance);
+      setAccountBalance(bal);
     } catch (error) {
       console.log("Something wrong when connecting wallet");
     }
@@ -230,6 +256,63 @@ export const NFTMarketplaceProvider = ({ children }) => {
     }
   };
 
+  //--------------------------------------------------
+  //---Tranfer---
+  const [transactions, setTransactions] = useState([]);
+  const [transactionCount, setTransactionCount] = ("");
+  const transferEther = async(address, ether, message) => {
+    try {
+      if (currentAccount) {
+        const contract = await connectToTransfer();
+        console.log(address, ether, message)
+        const unFormatedPrice = ethers.utils.parseEther(ether);
+        await ethereum.request({
+          method: "eth_sendTransaction",
+          params: [
+            {
+              from: currentAccount,
+              to: address,
+              gas: "0x5208",
+              value: unFormatedPrice._hex,
+            }
+          ]
+        });
+
+        const transaction = await contract.addDataToBlockchain(address, unFormatedPrice, message);
+        transaction.wait();
+        const transactionCount = await contract.getTransactionCount();
+        setTransactionCount(transactionCount.toNumber());
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  //ALL TRANSACTION
+  const getAllTransactions = async() => {
+    try {
+      if(ethereum) {
+        const contract = await connectToTransfer();
+        const availableTransaction = await contract.getAllTransactions();
+        const readTransaction = availableTransaction.map((transaction) => ({
+          addressTo: transaction.receiver,
+          addressFrom: transaction.sender,
+          message: transaction.message,
+          timestamp: new DataTransfer(transaction.timestamp.toNumber() * 1000).toLocaleString(),
+          amount: parseInt(transaction.amount._hex) / 10 ** 18,
+        }));
+
+        setTransactions(readTransaction);
+      } else {
+        console.log("On Ethereum")
+      }
+    } catch (error) {
+      console.log("Error when getting all transactions");
+    }
+  }
+
 
   return (
     <NFTMarketplaceContext.Provider
@@ -242,8 +325,13 @@ export const NFTMarketplaceProvider = ({ children }) => {
         createSale,
         fetchMyNFTsorListedNFTs,
         buyNFT,
+        transferEther,
+        accountBalance,
         currentAccount,
         titleData,
+        transactionCount,
+        transactions,
+        getAllTransactions
       }}
     >
       {children}
