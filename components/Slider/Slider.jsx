@@ -34,8 +34,8 @@ export const Slider = () => {
   ];
     const [width, setWidth] = useState(0);
     const dragSlider = useRef();
+    const isScrolling = useRef(false);
 
-  
     useEffect(() => {
       setWidth(dragSlider.current.scrollWidth - dragSlider.current.offsetWidth);
     });
