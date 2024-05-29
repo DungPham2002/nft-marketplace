@@ -1,11 +1,14 @@
 import Router, { useRouter } from "next/router";
 import { ethers } from "ethers";
-import { NFTMarketplaceAdrress, NFTMarketplaceABI, TransferAddress, TransferABI } from "./constants";
+import {
+  NFTMarketplaceAdrress,
+  NFTMarketplaceABI,
+  TransferAddress,
+  TransferABI,
+} from "./constants";
 import React, { Children, useEffect, useState } from "react";
 import axios from "axios";
 import Web3Modal from "web3modal";
-
-
 
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(
@@ -26,7 +29,6 @@ const connectingWithSmartContract = async () => {
     console.log("Error when connecting smart contract");
   }
 };
-
 
 const fetchTransferContract = (signerOrProvider) =>
   new ethers.Contract(
@@ -67,8 +69,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         setCurrentAccount(accounts[0]);
       } else {
         console.log("No account found");
-      };
-      
+      }
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const getBalance = await provider.getBalance(accounts[0]);
       const bal = ethers.utils.formatEther(getBalance);
@@ -89,7 +91,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         method: "eth_requestAccounts",
       });
       setCurrentAccount(accounts[0]);
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -105,9 +107,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
           url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
           data: formData,
           headers: {
-            pinata_api_key: "7e2eea3792f27b6e5d7c",
-            pinata_secret_api_key:
-              "9abec51df545ed67420e397b89b87ffe80b401482f06e87675c40a01e325938f",
+            pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+            pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET__KEY,
             "Content-Type": "multipart/form-data",
           },
         });
@@ -129,9 +130,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
         data: data,
         headers: {
-          pinata_api_key: "7e2eea3792f27b6e5d7c",
-          pinata_secret_api_key:
-            "9abec51df545ed67420e397b89b87ffe80b401482f06e87675c40a01e325938f",
+          pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+          pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET__KEY,
           "Content-Type": "application/json",
         },
       });
@@ -169,7 +169,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         const contract = fetchContract(provider);
         const data = await contract.fetchMarketItems();
         const items = await Promise.all(
-          data.map(async ({ tokenId, seller, owner, price: unformattedPrice }) => {
+          data.map(
+            async ({ tokenId, seller, owner, price: unformattedPrice }) => {
               const tokenURI = await contract.tokenURI(tokenId);
               const {
                 data: { image, name, description },
@@ -189,20 +190,21 @@ export const NFTMarketplaceProvider = ({ children }) => {
                 description,
                 tokenURI,
               };
-          })
+            }
+          )
         );
         return items;
       }
     } catch (error) {
-      console.log("Error when fetching NFT");
+      console.log("Error when fetching NFT", error);
     }
   };
 
   useEffect(() => {
-    if(currentAccount) {
-      fetchNFTs();
+    if (currentAccount) {
+      fetchNFTs()
     }
-  }, []);
+  }, [currentAccount]);
 
   const fetchMyNFTsorListedNFTs = async (type) => {
     try {
@@ -254,7 +256,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       });
 
       await transaction.wait();
-      router.push("/author")
+      router.push("/author");
     } catch (error) {
       console.log("Error when buying NFT");
     }
@@ -263,12 +265,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
   //--------------------------------------------------
   //---Tranfer---
   const [transactions, setTransactions] = useState([]);
-  const [transactionCount, setTransactionCount] = ("");
-  const transferEther = async(address, ether, message) => {
+  const [transactionCount, setTransactionCount] = "";
+  const transferEther = async (address, ether, message) => {
     try {
       if (currentAccount) {
         const contract = await connectToTransfer();
-        console.log(address, ether, message)
         const unFormatedPrice = ethers.utils.parseEther(ether);
         await ethereum.request({
           method: "eth_sendTransaction",
@@ -278,11 +279,15 @@ export const NFTMarketplaceProvider = ({ children }) => {
               to: address,
               gas: "0x5208",
               value: unFormatedPrice._hex,
-            }
-          ]
+            },
+          ],
         });
 
-        const transaction = await contract.addDataToBlockchain(address, unFormatedPrice, message);
+        const transaction = await contract.addDataToBlockchain(
+          address,
+          unFormatedPrice,
+          message
+        );
         transaction.wait();
         const transactionCount = await contract.getTransactionCount();
         setTransactionCount(transactionCount.toNumber());
@@ -291,32 +296,159 @@ export const NFTMarketplaceProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-  }
-
+  };
 
   //ALL TRANSACTION
-  const getAllTransactions = async() => {
+  const getAllTransactions = async () => {
     try {
-      if(ethereum) {
+      if (ethereum) {
         const contract = await connectToTransfer();
         const availableTransaction = await contract.getAllTransactions();
         const readTransaction = availableTransaction.map((transaction) => ({
           addressTo: transaction.receiver,
           addressFrom: transaction.sender,
           message: transaction.message,
-          timestamp: new DataTransfer(transaction.timestamp.toNumber() * 1000).toLocaleString(),
+          timestamp: new DataTransfer(
+            transaction.timestamp.toNumber() * 1000
+          ).toLocaleString(),
           amount: parseInt(transaction.amount._hex) / 10 ** 18,
         }));
 
         setTransactions(readTransaction);
       } else {
-        console.log("On Ethereum")
+        console.log("On Ethereum");
       }
     } catch (error) {
       console.log("Error when getting all transactions");
     }
-  }
+  };
 
+  // --------------------------------------
+  // AUCTION
+
+  const fetchActiveAuctions = async () => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const data = await contract.fetchActiveAuctions();
+      const activeAuctions = await Promise.all(
+        data.map(
+          async ({
+            tokenId,
+            owner,
+            seller,
+            minBid: unFormatedMinBid,
+            highestBid: unFormatedHightestBid,
+            highestBidder,
+            endTime: unformattedTime,
+          }) => {
+            const tokenURI = await contract.tokenURI(tokenId);
+            const {
+              data: { image, name, description },
+            } = await axios.get(tokenURI);
+            const minBid = ethers.utils.formatUnits(
+              unFormatedMinBid.toString(),
+              "ether"
+            );
+            const highestBid = ethers.utils.formatUnits(
+              unFormatedHightestBid.toString(),
+              "ether"
+            );
+            const endTime = new Date(unformattedTime.toNumber() * 1000);
+            return {
+              tokenId: tokenId.toNumber(),
+              seller,
+              owner,
+              image,
+              name,
+              description,
+              minBid,
+              highestBid,
+              highestBidder,
+              tokenURI,
+              endTime,
+            };
+          }
+        )
+      );
+      return activeAuctions;
+    } catch (error) {
+      console.log("Error fetching active auctions", error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentAccount) {
+      fetchActiveAuctions();
+    }
+  });
+
+  const createAuction = async (id, minBid, duration) => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const minBidPrice = ethers.utils.parseUnits(minBid, "ether");
+      const transaction = await contract.createAuction(
+        id,
+        minBidPrice,
+        duration
+      );
+      await transaction.wait();
+    } catch (error) {
+      console.log("Error creating auction", error);
+    }
+  };
+
+  const bidOnAuction = async (tokenId, bidAmount) => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.bidOnAuction(tokenId, {
+        value: ethers.utils.parseEther(bidAmount),
+      });
+      transaction.wait();
+    } catch (error) {
+      console.log("Error placing bid", error);
+    }
+  };
+
+  const endAuction = async (tokenId) => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.endAuction(tokenId);
+      transaction.wait();
+    } catch (error) {
+      console.log("Error ending auction", error);
+    }
+  };
+
+  const checkAndEndAuctions = async () => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const activeAuctions = await contract.fetchActiveAuctions();
+
+      for (const auction of activeAuctions) {
+        const endTime = new Date(auction.endTime.toNumber() * 1000);
+        const currentTime = new Date();
+
+        if (currentTime >= endTime) {
+          console.log(`Ending auction for token ID ${auction.tokenId}`);
+          const tx = await contract.endAuction(auction.tokenId);
+          await tx.wait();
+          console.log(
+            `Auction for token ID ${auction.tokenId} ended successfully`
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error ending auction:", error);
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(checkAndEndAuctions, 300000);
+    checkAndEndAuctions();
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <NFTMarketplaceContext.Provider
@@ -335,7 +467,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
         titleData,
         transactionCount,
         transactions,
-        getAllTransactions
+        getAllTransactions,
+        fetchActiveAuctions,
+        bidOnAuction,
+        endAuction,
+        createAuction,
       }}
     >
       {children}

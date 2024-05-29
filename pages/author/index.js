@@ -45,11 +45,13 @@ export default function Author() {
     const [like, setLike] = useState(false);
     const [follower, setFollower] = useState(false);
     const [following, setFollowing] = useState(false);
+    const [auction, setAuction] = useState(false);
   
-    const { fetchMyNFTsorListedNFTs, currentAccount } = useContext(NFTMarketplaceContext);
+    const { fetchMyNFTsorListedNFTs, currentAccount, fetchActiveAuctions } = useContext(NFTMarketplaceContext);
 
     const [nfts, setNfts] = useState([]);
     const [myNFTs, setMyNFTs] = useState([]);
+    const [auctionList, setAuctionList] = useState([]);
 
     useEffect(() => {
       fetchMyNFTsorListedNFTs("fetchItemsListed").then((items) => {
@@ -63,7 +65,11 @@ export default function Author() {
       });
     }, []);
 
-    console.log(myNFTs)
+    useEffect(() => {
+      fetchActiveAuctions().then((items) => {
+        setAuctionList(items)
+      });
+    }, [])
 
     return (
       <div className="">
@@ -75,6 +81,7 @@ export default function Author() {
           setLike={setLike}
           setFollower={setFollower}
           setFollowing={setFollowing}
+          setAuction={setAuction}
         />
   
         <AuthorNFTCardBox
@@ -83,8 +90,10 @@ export default function Author() {
           like={like}
           follower={follower}
           following={following}
+          auction={auction}
           myNFTs={myNFTs}
           nfts={nfts}
+          auctionList={auctionList}
         />
         <Title
           heading="Popular Creators"

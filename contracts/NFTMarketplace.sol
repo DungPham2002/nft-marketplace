@@ -33,6 +33,19 @@ contract NFTMarketplace is ERC721URIStorage {
         bool sold
     );
 
+    struct Auction {
+        uint256 tokenId;
+        address payable seller;
+        uint256 minBid;
+        uint256 highestBid;
+        address payable highestBidder;
+        uint256 endTime;
+        bool active;
+    }
+
+mapping(uint256 => Auction) private idToAuction;
+
+
     constructor() ERC721("Metaverse Tokens", "METT") {
         owner = payable(msg.sender);
     }
@@ -192,4 +205,78 @@ contract NFTMarketplace is ERC721URIStorage {
         }
         return items;
     }
+
+    function createAuction(uint256 tokenId, uint256 minBid, uint256 duration) public {
+        require(idToMarketItem[tokenId].owner == msg.sender, "Only item owner can create an auction");
+        require(minBid > 0, "Minimum bid must be greater than 0");
+        require(duration > 0, "Duration must be greater than 0");
+
+        idToAuction[tokenId] = Auction({
+            tokenId: tokenId,
+            seller: payable(msg.sender),
+            minBid: minBid,
+            highestBid: 0,
+            highestBidder: payable(address(0)),
+            endTime: block.timestamp + duration,
+            active: true
+        });
+
+        _transfer(msg.sender, address(this), tokenId);
+    }
+
+    function bidOnAuction(uint256 tokenId) public payable {
+        Auction storage auction = idToAuction[tokenId];
+        require(auction.active, "Auction is not active");
+        require(block.timestamp < auction.endTime, "Auction has ended");
+        require(msg.value > auction.minBid && msg.value > auction.highestBid, "Bid amount too low");
+
+        if (auction.highestBidder != address(0)) {
+            auction.highestBidder.transfer(auction.highestBid);
+        }
+
+        auction.highestBid = msg.value;
+        auction.highestBidder = payable(msg.sender);
+    }
+
+    function endAuction(uint256 tokenId) public {
+        Auction storage auction = idToAuction[tokenId];
+        require(auction.active, "Auction is not active");
+        require(block.timestamp >= auction.endTime, "Auction is still ongoing");
+
+        auction.active = false;
+
+        if (auction.highestBidder == address(0)) {
+            _transfer(address(this), auction.seller, tokenId);
+        } else {
+            _itemsSold.increment();
+            _transfer(address(this), auction.highestBidder, tokenId);
+            payable(owner).transfer(listingPrice);
+            auction.seller.transfer(auction.highestBid - listingPrice);
+            idToMarketItem[tokenId].owner = auction.highestBidder;
+            idToMarketItem[tokenId].seller = payable(address(0));
+            idToMarketItem[tokenId].sold = true;
+        }}
+
+
+    function fetchActiveAuctions() public view returns (Auction[] memory) {
+    uint256 itemCount = _tokenIds.current();
+    uint256 auctionCount = 0;
+    uint256 currentIndex = 0;
+
+    for (uint256 i = 0; i < itemCount; i++) {
+        if (idToAuction[i + 1].active) {
+            auctionCount += 1;
+        }
+    }
+
+    Auction[] memory auctions = new Auction[](auctionCount);
+    for (uint256 i = 0; i < itemCount; i++) {
+        if (idToAuction[i + 1].active) {
+            auctions[currentIndex] = idToAuction[i + 1];
+            currentIndex += 1;
+        }
+    }
+    return auctions;
+    }
+
 }

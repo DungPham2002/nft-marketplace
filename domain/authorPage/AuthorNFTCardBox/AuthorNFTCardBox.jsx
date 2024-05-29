@@ -9,8 +9,10 @@ export const AuthorNFTCardBox = ({
   like,
   follower,
   following,
+  auction,
   myNFTs,
-  nfts
+  nfts,
+  auctionList
 }) => {
 
   const likeArray = [
@@ -86,6 +88,7 @@ export const AuthorNFTCardBox = ({
       {collectiables && <NFTCardTwo NFTData={nfts} />}
       {created && <NFTCardTwo NFTData={myNFTs} />}
       {like && <NFTCardTwo NFTData={nfts} />}
+      {auction && <NFTCardTwo NFTData={auctionList} />}
       {follower && (
         <div className="w-[80%] my-0 mx-auto grid grid-cols-4 gap-[2rem]">
           {followerArray.map((el, i) => (

@@ -8,6 +8,7 @@ export const AuthorTabs = ({
   setLike,
   setFollower,
   setFollowing,
+  setAuction
 }) => {
   const [openList, setOpenList] = useState(false);
   const [activeBtn, setActiveBtn] = useState(1);
@@ -39,6 +40,7 @@ export const AuthorTabs = ({
       setFollower(false);
       setFollowing(false);
       setLike(false);
+      setAuction(false);
       setActiveBtn(1);
     } else if (btnText == "Own NFT") {
       setCollectiables(false);
@@ -46,6 +48,7 @@ export const AuthorTabs = ({
       setFollower(false);
       setFollowing(false);
       setLike(false);
+      setAuction(false);
       setActiveBtn(2);
     } else if (btnText == "Liked") {
       setCollectiables(false);
@@ -53,6 +56,7 @@ export const AuthorTabs = ({
       setFollower(false);
       setFollowing(false);
       setLike(true);
+      setAuction(false);
       setActiveBtn(3);
     } else if (btnText == "Following") {
       setCollectiables(false);
@@ -60,6 +64,7 @@ export const AuthorTabs = ({
       setFollower(false);
       setFollowing(true);
       setLike(false);
+      setAuction(false);
       setActiveBtn(4);
     } else if (btnText == "Followers") {
       setCollectiables(false);
@@ -67,7 +72,16 @@ export const AuthorTabs = ({
       setFollower(true);
       setFollowing(false);
       setLike(false);
+      setAuction(false);
       setActiveBtn(5);
+    } else if (btnText == "Auction") {
+      setCollectiables(false);
+      setCreated(false);
+      setFollower(false);
+      setFollowing(false);
+      setLike(false);
+      setAuction(true);
+      setActiveBtn(6);
     }
   };
 
@@ -99,9 +113,6 @@ export const AuthorTabs = ({
             </button>
             <button
               className={`${activeBtn == 4 ? activeClass : ""} ${buttonClass}`}
-
-
-
               onClick={(e) => openTab(e)}
             >
               Following
@@ -109,11 +120,15 @@ export const AuthorTabs = ({
             <button
               className={`${activeBtn == 5 ? activeClass : ""} ${buttonClass}`}
 
-
-
               onClick={(e) => openTab(e)}
             >
               Followers
+            </button>
+            <button
+              className={`${activeBtn == 6 ? activeClass : ""} ${buttonClass}`}
+              onClick={(e) => openTab(e)}
+            >
+              Auction
             </button>
           </div>
         </div>

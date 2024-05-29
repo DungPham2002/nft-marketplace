@@ -23,6 +23,7 @@ import { NFTTabs } from "../NFTTabs/NFTTabs";
 import Link from "next/link";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import { useRouter } from "next/router";
+import { CountDownTimer } from "./CountDownTimer/CountDownTimer";
 
 
 
@@ -199,49 +200,14 @@ export const NFTDescription = ({nft}) => {
               <p className="flex items-center text-[1.5rem] gap-[1rem]">
                 <MdTimer /> <span>Auction ending in:</span>
               </p>
-  
-              <div className="flex gap-[3rem] items-center">
-                <div
-                  className="{
-                    Style.NFTDescription_box_profile_biding_box_timer_item
-                  }"
-                >
-                  <p className="text-[3rem] font-black">2</p>
-                  <span className="font-semibold">Days</span>
-                </div>
-                <div
-                  className="{
-                    Style.NFTDescription_box_profile_biding_box_timer_item
-                  }"
-                >
-                  <p className="text-[3rem] font-black">22</p>
-                  <span className="font-semibold">hours</span>
-                </div>
-                <div
-                  className="{
-                    Style.NFTDescription_box_profile_biding_box_timer_item
-                  }"
-                >
-                  <p className="text-[3rem] font-black">45</p>
-                  <span className="font-semibold">mins</span>
-                </div>
-                <div
-                  className="{
-                    Style.NFTDescription_box_profile_biding_box_timer_item
-                  }"
-                >
-                  <p className="text-[3rem] font-black">12</p>
-                  <span className="font-semibold">secs</span>
-                </div>
-              </div>
-  
+              <CountDownTimer targetDate={nft.endTime}/>
               <div className="mt-[4rem] grid grid-cols-[4fr,1fr] gap-[3rem] items-end justify-between">
                 <div
                   className="border-[2px] border-solid border-icons-color rounded-[0.5rem]"
                 >
                   <small className="text-[1.2rem] bg-icons-color text-main-bg p-[1rem] rounded-[0.5rem] ml-[2rem]">Current Bid</small>
                   <p className="p-[1rem] text-[1.5rem] font-black">
-                    {nft.price} ETH <span>( ≈ $3,221.22)</span>
+                    {(nft.highestBid && nft.highestBid != 0) ? (nft.highestBid) : (nft.minBid) ? (nft.minBid) : (nft.price)} ETH <span>( ≈ $3,221.22)</span>
                   </p>
                 </div>
   
@@ -269,12 +235,22 @@ export const NFTDescription = ({nft}) => {
                   classStyle="flex items-center"
                 />
                 )}
-                <Button
-                  icon={<FaPercentage className="mr-[0.5rem]"/>}
-                  btnName="Make offer"
-                  handleClick={() => {}}
+                {currentAccount == nft.owner.toLowerCase() ? (
+                  <Button
+                  icon={<FaWallet className="mr-[0.5rem]"/>}
+                  btnName="List on Auction"
+                  handleClick={() => router.push(`/auctionNFT?id=${nft.tokenId}&tokenURI=${nft.tokenURI}`)}
+
                   classStyle="flex items-center"
                 />
+                ) : (
+                  <Button
+                  icon={<FaWallet className="mr-[0.5rem]"/>}
+                  btnName="Make offer"
+                  handleClick={() => router.push(`/bidNFT?id=${nft.tokenId}&tokenURI=${nft.tokenURI}`)}
+                  classStyle="flex items-center"
+                />
+                )}
               </div>
   
               <div className="mt-[3rem] flex gap-[1rem]">
