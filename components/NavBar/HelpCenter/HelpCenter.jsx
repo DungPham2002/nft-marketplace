@@ -3,8 +3,8 @@ import Link from "next/link"
 export const HelpCenter = () => {
     const helpCenter = [
         {
-            name: "About",
-            link: "about"
+            name: "About Us",
+            link: "about-us"
         },
         {
             name: "Contact Us",

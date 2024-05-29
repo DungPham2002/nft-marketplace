@@ -54,7 +54,7 @@ export const Profile = ({currentAccount}) => {
                     <div className="flex items-center gap-[2rem] py-[1rem] px-[1.5rem] ease-in transition-all hover:bg-icons-color hover:text-shadow-dark rounded-[0.3rem]">
                         <TbDownload />
                         <p>
-                            <Link href={{ pathname: '/about-us' }}>About Ua</Link>
+                            <Link href={{ pathname: '/about-us' }}>About Us</Link>
                         </p>
                     </div>
                 </div>
