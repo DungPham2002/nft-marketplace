@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import images from "@/images";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
+import { useRouter } from "next/router";
 
 
 
 export default function connectWalletPage() {
+    const router = useRouter();
     const { currentAccount, connectWallet } = useContext(NFTMarketplaceContext);
     const [activeBtn, setActiveBtn] = useState(1);
     const providerArray = [
@@ -13,10 +15,10 @@ export default function connectWalletPage() {
         provider: images.provider1,
         name: "Metamask",
       },
-      {
-        provider: images.provider2,
-        name: "Coinbase",
-      }
+      // {
+      //   provider: images.provider2,
+      //   name: "Coinbase",
+      // }
     ];
     return (
       <div className="w-full my-[5rem]">

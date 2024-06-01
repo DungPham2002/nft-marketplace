@@ -95,7 +95,7 @@ export const NavBar = () => {
       }
     };
 
-    const { currentAccount, connectWallet } = useContext(NFTMarketplaceContext);
+    const { currentAccount } = useContext(NFTMarketplaceContext);
   
     return (
       <div className="w-full z-[11111] p-6 relative">
@@ -153,7 +153,7 @@ export const NavBar = () => {
             {/* CREATE BUTTON SECTION */}
             <div className="relative cursor-pointer max-[768px]:hidden">
               {currentAccount == "" ? (
-                <Button btnName="Connect" handleClick={() => connectWallet()}/>
+                <Button btnName="Connect" handleClick={() => router.push("connect-wallet")}/>
               ) : (
                 <Button btnName="Create" handleClick={() => router.push("upload-NFT")} />
               )}

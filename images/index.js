@@ -47,6 +47,7 @@ import upload from "./upload.png"
 import provider1 from "./provider-1.png"
 import provider2 from "./provider-2.png"
 
+
 export default {
   collection,
   update,
@@ -95,5 +96,5 @@ export default {
   nftvideo,
   upload,
   provider1,
-  provider2
+  provider2,
 };

@@ -9,6 +9,7 @@ import {
 import React, { Children, useEffect, useState } from "react";
 import axios from "axios";
 import Web3Modal from "web3modal";
+import { logIn } from "@/api/auth.api";
 
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(
@@ -31,11 +32,7 @@ const connectingWithSmartContract = async () => {
 };
 
 const fetchTransferContract = (signerOrProvider) =>
-  new ethers.Contract(
-    TransferAddress,
-    TransferABI,
-    signerOrProvider
-  );
+  new ethers.Contract(TransferAddress, TransferABI, signerOrProvider);
 
 const connectToTransfer = async () => {
   try {
@@ -91,10 +88,37 @@ export const NFTMarketplaceProvider = ({ children }) => {
         method: "eth_requestAccounts",
       });
       setCurrentAccount(accounts[0]);
-      window.location.reload();
+      signMessage(accounts[0])
+      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const signMessage = async (account) => {
+    try {
+      if (!window.ethereum) {
+        console.log("Install MetaMask");
+        return;
+      }
+
+      const message = "Welcome To Marketplace";
+      const signature = await window.ethereum.request({
+        method: 'personal_sign',
+        params: [message, account],
+      });
+      await logIn(account, signature);
+      router.push('/');
+      console.log(`Signature for account ${account}:`, signature);
+
+    } catch (error) {
+      console.log("Error signing message:", error);
+    }
+  };
+
+  const logOut = () => {
+    setCurrentAccount("");
+    console.log("User signed out");
   };
 
   const uploadToPinata = async (file) => {
@@ -202,7 +226,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   useEffect(() => {
     if (currentAccount) {
-      fetchNFTs()
+      fetchNFTs();
     }
   }, [currentAccount]);
 
@@ -472,6 +496,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         bidOnAuction,
         endAuction,
         createAuction,
+        logOut,
       }}
     >
       {children}

@@ -16,11 +16,10 @@ export default function Home() {
 
   const creators = getTopCreators(nfts);
 
-
   useEffect(() => {
     if (currentAccount) {
       fetchNFTs().then((item) => {
-        setNfts(item.reverse());
+        setNfts(item?.reverse());
         setNftCoppy(item);
     });
     }

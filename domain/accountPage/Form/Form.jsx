@@ -6,9 +6,32 @@ import {
   TiSocialInstagram,
 } from "react-icons/ti";
 import { Button } from "@/components/componentsindex";
+import {  useEffect, useState } from "react";
+import { updateUserProfile } from "@/api/user.api";
 
 
-export const Form = () => {
+export const Form = ({userProfile,image}) => {
+    const [name, setName] = useState(userProfile?.name);
+    const [email, setEmail] = useState(userProfile?.email);
+    const [description, setDescription] = useState(userProfile?.description);
+    const [website, setWebsite] = useState(userProfile?.website);
+    const [facebook, setFacebook] = useState(userProfile?.facebbook);
+    const [twitter, setTwitter] = useState(userProfile?.twitter);
+    const [instagram, setInstagram] = useState(userProfile?.instagram);
+    const [avatar, setAvatar] = useState(userProfile?.avatar);
+
+    useEffect(() => {
+        setAvatar(image);
+    }, [image]);
+    
+    const handleSubmit = async () => {
+    try {
+        await updateUserProfile(name, email, avatar, description, website, facebook, twitter, instagram);
+        console.log("Profile updated successfully");
+    } catch (error) {
+        console.error("Error updating profile:", error);
+    }
+    };
     return (
         <div className="w-full">
             <div className="{Style.Form_box}">
@@ -17,7 +40,8 @@ export const Form = () => {
                     <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="name">Username</label>
                     <input
                     type="text"
-                    placeholder="shoaib bhai"
+                    placeholder={userProfile?.name || "Name"}
+                    onChange={e => setName(e.target.value)}
                     className="w-full border-[1px] border-solid border-icons-color p-[1rem] rounded-[1rem] bg-[transparent] mt-[0.5rem] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color"
                     />
                 </div>
@@ -28,7 +52,8 @@ export const Form = () => {
                     <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
                         <HiOutlineMail />
                     </div>
-                    <input className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" type="text" placeholder="Email*" />
+                    <input className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" type="text" placeholder={userProfile?.email || "Email*"} onChange={e => setEmail(e.target.value)} />
+
                     </div>
                 </div>
         
@@ -40,7 +65,8 @@ export const Form = () => {
                         id=""
                         cols="30"
                         rows="6"
-                        placeholder="something about yourself in few words"
+                        placeholder={userProfile?.description || "something about yourself in few words"}
+                        onChange={e => setDescription(e.target.value)}
                     ></textarea>
                 </div>
 
@@ -51,7 +77,12 @@ export const Form = () => {
                         <MdOutlineHttp />
                     </div>
 
-                    <input className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" type="text" placeholder="website" />
+                    <input 
+                        className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" 
+                        type="text" 
+                        placeholder={userProfile?.website || "website"} 
+                        onChange={e => setWebsite(e.target.value)}
+                    />
                     </div>
                 </div>
 
@@ -62,7 +93,12 @@ export const Form = () => {
                             <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
                             <TiSocialFacebook />
                             </div>
-                            <input className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" type="text" placeholder="http://shoaib" />
+                            <input 
+                                className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" 
+                                type="text" 
+                                placeholder={userProfile?.facebook || "facebook.com"} 
+                                onChange={e => setFacebook(e.target.value)}
+                            />
                         </div>
                     </div>
                     <div className="mt-[2rem]">
@@ -71,7 +107,12 @@ export const Form = () => {
                         <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
                         <TiSocialTwitter />
                         </div>
-                        <input className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" type="text" placeholder="http://shoaib" />
+                        <input 
+                            className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" 
+                            type="text" placeholder={userProfile?.twitter || "twitter.com"} 
+                            onChange={e => setTwitter(e.target.value)}
+                        />
+
                     </div>
                     </div>
                     <div className="mt-[2rem]">
@@ -80,7 +121,12 @@ export const Form = () => {
                             <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
                             <TiSocialInstagram />
                             </div>
-                            <input className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" type="text" placeholder="http://shoaib" />
+                            <input 
+                                className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" 
+                                type="text" 
+                                placeholder={userProfile?.instagram || "instagram.com"} 
+                                onChange={e => setInstagram(e.target.value)}
+                            />
                         </div>
                     </div>
                 </div>
@@ -94,7 +140,8 @@ export const Form = () => {
                     <input
                         className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color"
                         type="text"
-                        placeholder="0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8"
+                        disabled
+                        placeholder={userProfile?.address}
                     />
                     <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
                         <MdOutlineContentCopy />
@@ -103,10 +150,10 @@ export const Form = () => {
                 </div>
 
                 <div className="my-[4rem] mx-0">
-                    <Button
-                    btnName="Upload profile"
-                    handleClick={() => {}}
-                    classStyle="w-full flex justify-center text-[1.5rem]"
+                    <Button 
+                        btnName="Upload profile"
+                        handleClick={() => handleSubmit()}
+                        classStyle="w-full flex justify-center text-[1.5rem]"
                     />
                 </div>
                 </form>

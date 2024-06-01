@@ -4,8 +4,11 @@ import Image from "next/image";
 import { FaUserAlt, FaRegImage, FaUserEdit } from "react-icons/fa";
 import { MdHelpCenter } from "react-icons/md";
 import { TbDownload } from "react-icons/tb";
+import { useContext } from "react";
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 
 export const Profile = ({currentAccount}) => {
+    const {logOut} = useContext(NFTMarketplaceContext);
     return (
         <div className="absolute py-[2rem] px-[0.5rem] shadow-shadow text-[1rem] w-[20rem] rounded-[1rem] left-[-17rem] top-[4.5rem] z-[22222] bg-main-bg">
             <div className="flex items-center gap-[2rem] p-[1.5rem]">
@@ -54,7 +57,7 @@ export const Profile = ({currentAccount}) => {
                     <div className="flex items-center gap-[2rem] py-[1rem] px-[1.5rem] ease-in transition-all hover:bg-icons-color hover:text-shadow-dark rounded-[0.3rem]">
                         <TbDownload />
                         <p>
-                            <Link href={{ pathname: '/about-us' }}>About Us</Link>
+                            <Link href={{ pathname: '/' }} onClick={() => logOut()}>Log Out</Link>
                         </p>
                     </div>
                 </div>
