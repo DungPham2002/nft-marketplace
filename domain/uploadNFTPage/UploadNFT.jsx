@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineHttp, MdOutlineAttachFile } from "react-icons/md";
 import { FaPercent } from "react-icons/fa";
 import { AiTwotonePropertySafety } from "react-icons/ai";
@@ -8,6 +8,8 @@ import images from "@/images";
 import { Button } from "@/components/componentsindex";
 import { DropZone } from "./uploadNFTIndex";
 import Router, { useRouter } from "next/router";
+import { getAllCollection } from "@/api/collection.api";
+import { createNft } from "@/api/nft.api";
 
 
 
@@ -18,53 +20,46 @@ export const UploadNFT = ({ uploadToPinata, createNFT }) => {
     const [description, setDescription] = useState("");
     const [royalties, setRoyalties] = useState("");
     const [fileSize, setFileSize] = useState("");
-    const [category, setCategory] = useState(0);
-    const [properties, setProperties] = useState("");
+    const [collection, setCollection] = useState(0);
     const [price, setPrice] = useState("");
     const [image, setImage] = useState(null);
+    const [collectionList, setCollectionList] = useState([]);
+    const [collectionId, setCollectionId] = useState(0);
 
     const router = useRouter();
-  
-    const categoryArry = [
-      {
-        image: images.nft_image_1,
-        category: "Sports",
-      },
-      {
-        image: images.nft_image_2,
-        category: "Arts",
-      },
-      {
-        image: images.nft_image_3,
-        category: "Music",
-      },
-      {
-        image: images.nft_image_1,
-        category: "Digital",
-      },
-      {
-        image: images.nft_image_2,
-        category: "Time",
-      },
-      {
-        image: images.nft_image_3,
-        category: "Photography",
-      },
-    ];
+
+    useEffect(() => {
+      getAllCollection().then((items) => {
+        setCollectionList(items);
+      })
+    }, []);
+
+    const handleCreateNFT = async() => {
+      const nftCreated = await createNFT(
+        name,
+        price,
+        image,
+        description,
+        router
+      );
+      if (nftCreated) {
+       createNft(image, name, description, website, +price, fileSize, +royalties, collectionId);
+      }
+    }
   
     return (
-      <div className="{Style.upload}">
+      <div className="">
         <DropZone
           title="JPG, PNG, WEBM , MAX 100MB"
           heading="Drag & drop file"
           subHeading="or Browse media on your device"
           name={name}
+          price={price}
           website={website}
           description={description}
           royalties={royalties}
           fileSize={fileSize}
-          category={category}
-          properties={properties}
+          collection={collection}
           setImage={setImage}
           uploadToPinata={uploadToPinata}
         />
@@ -126,13 +121,13 @@ export const UploadNFT = ({ uploadToPinata, createNFT }) => {
             </p>
   
             <div className="flex gap-[1rem]">
-              {categoryArry.map((el, i) => (
+              {collectionList.map((el, i) => (
                 <div
                   className={`${"border-[1px] border-solid border-icons-color rounded-[1rem] p-[1rem] cursor-pointer"} ${
                     active == i + 1 ? "bg-icons-color text-main-bg" : ""
                   }`}
                   key={i + 1}
-                  onClick={() => (setActive(i + 1), setCategory(el.category))}
+                  onClick={() => (setActive(i + 1), setCollection(el.name), setCollectionId(el.id))}
                 >
                   <div className="flex items-center gap-[3rem]">
                     <div className="{Style.upload_box_slider_box_img}">
@@ -148,7 +143,7 @@ export const UploadNFT = ({ uploadToPinata, createNFT }) => {
                       <TiTick />
                     </div>
                   </div>
-                  <p className="text-[1.2rem] font-bold">Crypto Legend - {el.category} </p>
+                  <p className="text-[1.2rem] font-bold">Crypto Legend - {el.name} </p>
                 </div>
               ))}
             </div>
@@ -183,20 +178,6 @@ export const UploadNFT = ({ uploadToPinata, createNFT }) => {
                 />
               </div>
             </div>
-            <div className="mt-[2rem]">
-              <label className="block w-ful ml-[1rem] font-bold text-[1.3rem]" htmlFor="Propertie">Propertie</label>
-              <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
-                <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
-                  <AiTwotonePropertySafety />
-                </div>
-                <input
-                    className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color"
-                    type="text"
-                    placeholder="Propertie"
-                    onChange={(e) => setProperties(e.target.value)}
-                />
-              </div>
-            </div>
 
             <div className="mt-[2rem]">
               <label className="block w-ful ml-[1rem] font-bold text-[1.3rem]" htmlFor="Price">Price</label>
@@ -217,13 +198,7 @@ export const UploadNFT = ({ uploadToPinata, createNFT }) => {
           <div className="grid grid-cols-2 my-[4rem] gap-[2rem]">
             <Button
               btnName="Upload"
-              handleClick={async() => createNFT(
-                name,
-                price,
-                image,
-                description,
-                router
-              )}
+              handleClick={() => handleCreateNFT()}
               classStyle="w-full grid self-center text-[1.3rem]"
             />
             <Button

@@ -133,7 +133,7 @@ export const BigNFTSlider = () => {
             <div className="my-[2rem] py-0 px-[4rem] rounded-[0.5rem] border-[3px] border-solid border-shadow-dark">
               <small className="py-[1rem] px-[2rem] bg-shadow-dark font-semibold rounded-[0.5rem]">Current Bid</small>
               <p className="my-[1rem]">
-                {sliderData[idNumber].price} <span>$221,21</span>
+                {sliderData[idNumber].price} <span></span>
               </p>
             </div>
 

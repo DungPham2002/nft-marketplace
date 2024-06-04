@@ -1,5 +1,5 @@
 import images from "@/images";
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import { BsSearch } from "react-icons/bs";
 import { Discover } from "./Discover/Discover";
 import { HelpCenter } from "./HelpCenter/HelpCenter";
@@ -13,6 +13,7 @@ import { CgMenuLeft, CgMenuRight } from "react-icons/cg";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { getUserProfile } from "@/api/user.api";
 
 export const NavBar = () => {
     //USESTATE COMPONNTS
@@ -96,6 +97,13 @@ export const NavBar = () => {
     };
 
     const { currentAccount } = useContext(NFTMarketplaceContext);
+    const [userProfile, setUserProfile] = useState(null);
+
+    useEffect(() => {
+      getUserProfile().then((user) => {
+        setUserProfile(user);
+      });
+    }, []);
   
     return (
       <div className="w-full z-[11111] p-6 relative">
@@ -164,14 +172,15 @@ export const NavBar = () => {
             <div className="relative cursor-pointer">
               <div className="rounded-full">
                 <Image
-                  src={images.user1}
+                  src={userProfile?.avatar || images.user1}
                   alt="Profile"
                   width={40}
                   height={40}
                   onClick={() => openProfile()}
                   className="rounded-[50%] h-[40px] w-[40px]" />
   
-                {profile && <Profile currentAccount={currentAccount}/>}
+                {profile && <Profile currentAccount={currentAccount} avatar={userProfile?.avatar} />}
+
               </div>
             </div>
   

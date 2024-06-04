@@ -7,13 +7,13 @@ import { TbDownload } from "react-icons/tb";
 import { useContext } from "react";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 
-export const Profile = ({currentAccount}) => {
+export const Profile = ({currentAccount, avatar}) => {
     const {logOut} = useContext(NFTMarketplaceContext);
     return (
         <div className="absolute py-[2rem] px-[0.5rem] shadow-shadow text-[1rem] w-[20rem] rounded-[1rem] left-[-17rem] top-[4.5rem] z-[22222] bg-main-bg">
             <div className="flex items-center gap-[2rem] p-[1.5rem]">
                 <Image 
-                    src={images.user1}
+                    src={avatar || images.user1}
                     alt="user profile"
                     width={50}
                     height={50}

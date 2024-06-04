@@ -10,11 +10,11 @@ export const DropZone = ({
         subHeading,
         name,
         website,
+        price,
         description,
         royalties,
         fileSize,
-        category,
-        properties,
+        collection,
         uploadToPinata,
         setImage
     }) => {
@@ -72,6 +72,13 @@ export const DropZone = ({
                     {website || ""}
                   </p>
                 </div>
+
+                <div className="{Style.DropZone_box_aside_box_preview_two}">
+                  <p>
+                    <span className="text-[1.2rem] mx-[1rem] font-bold">Price</span>
+                    {price || ""}
+                  </p>
+                </div>
   
                 <div className="{Style.DropZone_box_aside_box_preview_two}">
                   <p>
@@ -90,12 +97,8 @@ export const DropZone = ({
                     {fileSize || ""}
                   </p>
                   <p>
-                    <span className="text-[1.2rem] mx-[1rem] font-bold">Properties</span>
-                    {properties || ""}
-                  </p>
-                  <p>
-                    <span className="text-[1.2rem] mx-[1rem] font-bold">Category</span>
-                    {category || ""}
+                    <span className="text-[1.2rem] mx-[1rem] font-bold">Collection</span>
+                    {collection || ""}
                   </p>
                 </div>
               </div>

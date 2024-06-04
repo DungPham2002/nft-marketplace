@@ -161,10 +161,15 @@ export const NFTMarketplaceProvider = ({ children }) => {
       });
 
       const url = `https://beige-necessary-lobster-645.mypinata.cloud/ipfs/${response.data.IpfsHash}`;
-      await createSale(url, price);
+      const createSaleNft = await createSale(url, price);
       router.push("/search");
+      if (createSaleNft) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error when creating nft",error);
     }
   };
 
@@ -181,8 +186,10 @@ export const NFTMarketplaceProvider = ({ children }) => {
             value: listingPrice.toString(),
           });
       await transaction.wait();
+      return true;
     } catch (error) {
       console.log("Error when creating sale", error);
+      return false;
     }
   };
 
