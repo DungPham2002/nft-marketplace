@@ -411,7 +411,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
     if (currentAccount) {
       fetchActiveAuctions();
     }
-  });
+  }, []);
 
   const createAuction = async (id, minBid, duration) => {
     try {
