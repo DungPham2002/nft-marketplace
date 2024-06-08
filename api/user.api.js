@@ -4,14 +4,16 @@ import { BASE_API_URL } from "@/datas";
 export const getUserProfile = async() => {
     try {
         const token = localStorage.getItem('accessToken');
-        const response = await axios.get(`${BASE_API_URL}/users/my-profile`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-        });
-        return response.data;
+        if (token) {
+            const response = await axios.get(`${BASE_API_URL}/users/my-profile`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+            return response.data;
+        }
     } catch (error) {
         console.error('Error logging in:', error);
         throw error;
