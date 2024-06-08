@@ -132,7 +132,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           data: formData,
           headers: {
             pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
-            pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET__KEY,
+            pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_KEY,
             "Content-Type": "multipart/form-data",
           },
         });
@@ -155,7 +155,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         data: data,
         headers: {
           pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
-          pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET__KEY,
+          pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_KEY,
           "Content-Type": "application/json",
         },
       });
