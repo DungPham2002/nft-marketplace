@@ -5,7 +5,7 @@ export const Banner = ({ bannerImage }) => {
         <div className="">
             <div className="">
                 <Image
-                className="object-cover h-[300px]"
+                className="object-cover h-[300px] w-full"
                 src={bannerImage}
                 alt="background"
                 width={1600}

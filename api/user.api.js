@@ -1,6 +1,18 @@
 import axios from "axios";
 import { BASE_API_URL } from "@/datas";
 
+
+export const getUserByAddress = async(address) => {
+    try {
+        const response = await axios.get(`${BASE_API_URL}/users/profile/${address}`,
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error logging in:', error);
+        throw error;
+    }
+};
+
 export const getUserProfile = async() => {
     try {
         const token = localStorage.getItem('accessToken');
