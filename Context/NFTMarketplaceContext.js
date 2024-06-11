@@ -232,43 +232,45 @@ export const NFTMarketplaceProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (currentAccount) {
+    // if (currentAccount) {
       fetchNFTs();
-    }
-  }, [currentAccount]);
+    // }
+  }, []);
 
   const fetchMyNFTsorListedNFTs = async (type) => {
     try {
-      const contract = await connectingWithSmartContract();
-      const data =
-        type === "fetchItemsListed"
-          ? await contract.fetchItemsListed()
-          : await contract.fetchMyNFTs();
-      const items = await Promise.all(
-        data.map(
-          async ({ tokenId, seller, owner, price: unformattedPrice }) => {
-            const tokenURI = await contract.tokenURI(tokenId);
-            const {
-              data: { image, name, description },
-            } = await axios.get(tokenURI);
-            const price = ethers.utils.formatUnits(
-              unformattedPrice.toString(),
-              "ether"
-            );
-            return {
-              name,
-              price,
-              tokenId: tokenId.toNumber(),
-              seller,
-              owner,
-              image,
-              description,
-              tokenURI,
-            };
-          }
-        )
-      );
-      return items;
+      if (currentAccount) {
+        const contract = await connectingWithSmartContract();
+        const data =
+          type === "fetchItemsListed"
+            ? await contract.fetchItemsListed()
+            : await contract.fetchMyNFTs();
+        const items = await Promise.all(
+          data.map(
+            async ({ tokenId, seller, owner, price: unformattedPrice }) => {
+              const tokenURI = await contract.tokenURI(tokenId);
+              const {
+                data: { image, name, description },
+              } = await axios.get(tokenURI);
+              const price = ethers.utils.formatUnits(
+                unformattedPrice.toString(),
+                "ether"
+              );
+              return {
+                name,
+                price,
+                tokenId: tokenId.toNumber(),
+                seller,
+                owner,
+                image,
+                description,
+                tokenURI,
+              };
+            }
+          )
+        );
+        return items;
+      }
     } catch (error) {
       console.log("Error when listing NFTs", error);
     }

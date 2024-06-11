@@ -4,6 +4,7 @@ import { BigNFTSlider, Service, Subscribe, Title, Category, Filter, NFTCard, Col
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import { getTopCreators } from "@/services/getTopCreators";
 
+
 export default function Home() {  
   const { checkIfWalletConnected, currentAccount } = useContext(NFTMarketplaceContext);
   useEffect(() => {
@@ -14,16 +15,19 @@ export default function Home() {
   const [nfts, setNfts] = useState([]);
   const [nftCoppy, setNftCoppy] = useState([]);
 
-  const creators = getTopCreators(nfts);
-
   useEffect(() => {
-    if (currentAccount) {
-      fetchNFTs().then((item) => {
-        setNfts(item?.reverse());
-        setNftCoppy(item);
-    });
-    }
-  }, []);
+    fetchNFTs().then((items) => {
+        setNfts(items?.reverse());
+        setNftCoppy(items)
+    })
+  }, [currentAccount]);
+
+
+  let creators = [];
+  if (nfts) {
+    creators = getTopCreators(nfts);
+  };
+
   return (
     <div className="">
       <HeroSection />

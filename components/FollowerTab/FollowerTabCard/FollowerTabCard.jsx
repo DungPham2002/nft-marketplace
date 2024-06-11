@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { MdVerified } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import images from "@/images";
+import { getUserByAddress } from "@/api/user.api";
 
 
 export const FollowerTabCard = ({ i, el }) => {
   const [following, setFollowing] = useState(false);
+  const [userAvatar, setUserAvatar] = useState("");
+
+  useEffect(() => {
+    getUserByAddress(el.seller).then((item) => {
+      setUserAvatar(item.avatar)
+    })
+  })
 
   const followMe = () => {
     if (!following) {
@@ -40,7 +48,7 @@ export const FollowerTabCard = ({ i, el }) => {
             alt="profile picture"
             width={50}
             height={50}
-            src={el.user || images.user2}
+            src={userAvatar || images.user2}
           />
         </div>
 
