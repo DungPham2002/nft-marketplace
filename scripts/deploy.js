@@ -10,10 +10,10 @@ async function main() {
   await transfer.deployed();
 
   console.log(
-    `Deployed contract Address ${nftMarketplace.address}`
+    `Deployed contract NFTMarketplace Address ${nftMarketplace.address}`
   );
   console.log(
-    `Deployed contract Address ${transfer.address}`
+    `Deployed contract Tranfer Address ${transfer.address}`
   );
 }
 
