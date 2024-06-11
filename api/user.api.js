@@ -33,11 +33,11 @@ export const getUserProfile = async() => {
 };
 
 
-export const updateUserProfile = async(name, email, avatar, description, website, facebook, twitter, instagram) => {
+export const updateUserProfile = async(name, email, avatar, description, youtube, facebook, twitter, instagram) => {
     try {
         const token = localStorage.getItem('accessToken');
         const response = await axios.put(`${BASE_API_URL}/users/my-profile`, {
-            name, email, avatar, description, website, facebook, twitter, instagram
+            name, email, avatar, description, youtube, facebook, twitter, instagram
         },
         {
             headers: {

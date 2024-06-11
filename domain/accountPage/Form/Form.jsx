@@ -4,6 +4,7 @@ import {
   TiSocialFacebook,
   TiSocialTwitter,
   TiSocialInstagram,
+  TiSocialYoutube,
 } from "react-icons/ti";
 import { Button } from "@/components/componentsindex";
 import {  useEffect, useState } from "react";
@@ -14,7 +15,7 @@ export const Form = ({userProfile,image}) => {
     const [name, setName] = useState(userProfile?.name);
     const [email, setEmail] = useState(userProfile?.email);
     const [description, setDescription] = useState(userProfile?.description);
-    const [website, setWebsite] = useState(userProfile?.website);
+    const [youtube, setYoutube] = useState(userProfile?.youtube);
     const [facebook, setFacebook] = useState(userProfile?.facebbook);
     const [twitter, setTwitter] = useState(userProfile?.twitter);
     const [instagram, setInstagram] = useState(userProfile?.instagram);
@@ -26,7 +27,7 @@ export const Form = ({userProfile,image}) => {
     
     const handleSubmit = async () => {
     try {
-        await updateUserProfile(name, email, avatar, description, website, facebook, twitter, instagram);
+        await updateUserProfile(name, email, avatar, description, youtube, facebook, twitter, instagram);
         console.log("Profile updated successfully");
     } catch (error) {
         console.error("Error updating profile:", error);
@@ -70,23 +71,7 @@ export const Form = ({userProfile,image}) => {
                     ></textarea>
                 </div>
 
-                <div className="mt-[2rem]">
-                    <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="website">Website</label>
-                    <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
-                    <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
-                        <MdOutlineHttp />
-                    </div>
-
-                    <input 
-                        className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" 
-                        type="text" 
-                        placeholder={userProfile?.website || "website"} 
-                        onChange={e => setWebsite(e.target.value)}
-                    />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-[1rem]">
+                <div className="grid grid-cols-2 gap-[1rem]">
                     <div className="mt-[2rem]">
                         <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="facebook">Facebook</label>
                         <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
@@ -102,34 +87,53 @@ export const Form = ({userProfile,image}) => {
                         </div>
                     </div>
                     <div className="mt-[2rem]">
-                    <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="Twitter">Twitter</label>
-                    <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
-                        <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
-                        <TiSocialTwitter />
-                        </div>
-                        <input 
-                            className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" 
-                            type="text" placeholder={userProfile?.twitter || "twitter.com"} 
-                            onChange={e => setTwitter(e.target.value)}
-                        />
+                        <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="Twitter">Twitter</label>
+                        <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
+                            <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
+                            <TiSocialTwitter />
+                            </div>
+                            <input 
+                                className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" 
+                                type="text" placeholder={userProfile?.twitter || "twitter.com"} 
+                                onChange={e => setTwitter(e.target.value)}
+                            />
 
+                        </div>
                     </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-[1rem]">
+                    <div className="mt-[2rem]">
+                        <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="facebook">Youtube</label>
+                        <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
+                            <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
+                            <TiSocialYoutube />
+                            </div>
+                            <input 
+                                className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" 
+                                type="text" 
+                                placeholder={userProfile?.youtube || "youtube.com"} 
+                                onChange={e => setYoutube(e.target.value)}
+                            />
+                        </div>
                     </div>
                     <div className="mt-[2rem]">
-                        <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="Instragram">Instragram</label>
+                        <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="Twitter">Instagram</label>
                         <div className="w-full border-[1px] border-solid border-icons-color rounded-[1rem] items-center flex gap-[1rem] overflow-hidden">
                             <div className="text-[2rem] bg-icons-color py-[0.5rem] px-[1rem] text-main-bg grid cursor-pointer">
                             <TiSocialInstagram />
                             </div>
                             <input 
                                 className="w-[90%] border-0 bg-[transparent] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color mr-[1rem]" 
-                                type="text" 
-                                placeholder={userProfile?.instagram || "instagram.com"} 
+                                type="text" placeholder={userProfile?.instagram || "instagram.com"} 
                                 onChange={e => setInstagram(e.target.value)}
                             />
+
                         </div>
                     </div>
                 </div>
+
+
 
                 <div className="mt-[2rem]">
                     <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="wallet">Wallet address</label>
@@ -150,7 +154,7 @@ export const Form = ({userProfile,image}) => {
                 </div>
 
                 <div className="my-[4rem] mx-0">
-                    <Button 
+                    <Button
                         btnName="Upload profile"
                         handleClick={() => handleSubmit()}
                         classStyle="w-full flex justify-center text-[1.5rem]"

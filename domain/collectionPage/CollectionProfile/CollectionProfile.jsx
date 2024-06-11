@@ -5,6 +5,7 @@ import {
   TiSocialLinkedin,
   TiSocialTwitter,
   TiSocialInstagram,
+  TiSocialYoutube
 } from "react-icons/ti";
 import images from "@/images";
 
@@ -30,7 +31,7 @@ export const CollectionProfile = () => {
               <TiSocialInstagram />
             </a>
             <a className="transition-all ease-in p-[0.5rem] grid text-main-bg rounded-[50%] border-[1px] border-solid border-icons-color bg-icons-color hover:bg-main-bg hover:text-icons-color hover:shadow-shadow" href="#">
-              <TiSocialLinkedin />
+              <TiSocialYoutube />
             </a>
             <a className="transition-all ease-in p-[0.5rem] grid text-main-bg rounded-[50%] border-[1px] border-solid border-icons-color bg-icons-color hover:bg-main-bg hover:text-icons-color hover:shadow-shadow" href="#">
               <TiSocialTwitter />

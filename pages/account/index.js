@@ -8,8 +8,8 @@ import { getUserProfile } from "@/api/user.api";
 
 export default function account() {
   const { uploadToPinata } = useContext(NFTMarketplaceContext);
-  const [image, setImage] = useState(images.user1);
   const [userProfile, setUserProfile] = useState(null);
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     getUserProfile().then((user) => {
@@ -58,7 +58,7 @@ export default function account() {
         >
           <input {...getInputProps()} />
           <Image
-            src={image}
+            src={(image!="") ? image : images.user1}
             alt="account upload"
             width={150}
             height={150}

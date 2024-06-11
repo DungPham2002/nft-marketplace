@@ -119,7 +119,7 @@ export const NFTDescription = ({nft}) => {
                     <TiSocialFacebook /> Facebooke
                   </a>
                   <a className="flex items-center gap-[1rem] transition-all ease-in py-[0.5rem] px-[0.5rem] hover:bg-icons-color hover:text-main-bg rounded-[0.5rem] p-[0.5rem]" href="#">
-                    <TiSocialInstagram /> Instragram
+                    <TiSocialInstagram /> Instagram
                   </a>
                   <a className="flex items-center gap-[1rem] transition-all ease-in py-[0.5rem] px-[0.5rem] hover:bg-icons-color hover:text-main-bg rounded-[0.5rem] p-[0.5rem]" href="#">
                     <TiSocialLinkedin /> LinkedIn

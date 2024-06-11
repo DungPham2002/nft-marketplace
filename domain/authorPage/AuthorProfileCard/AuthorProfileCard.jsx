@@ -11,6 +11,7 @@ import {
   TiSocialLinkedin,
   TiSocialYoutube,
   TiSocialInstagram,
+  TiSocialTwitter
 } from "react-icons/ti";
 import { BsThreeDots } from "react-icons/bs";
 import images from "@/images";
@@ -93,7 +94,7 @@ export const AuthorProfileCard = ({currentAccount}) => {
                         <TiSocialInstagram />
                         </a>
                         <a className="cursor-pointer bg-icons-color text-main-bg rounded-[50%] grid p-[0.5rem] border-[1px] border-solid border-icons-color transition-all ease-in hover:shadow-shadow hover:bg-main-bg hover:text-icons-color" href="#">
-                        <TiSocialLinkedin />
+                        <TiSocialTwitter />
                         </a>
                         <a className="cursor-pointer bg-icons-color text-main-bg rounded-[50%] grid p-[0.5rem] border-[1px] border-solid border-icons-color transition-all ease-in hover:shadow-shadow hover:bg-main-bg hover:text-icons-color" href="#">
                         <TiSocialYoutube />
@@ -122,14 +123,14 @@ export const AuthorProfileCard = ({currentAccount}) => {
                             <TiSocialInstagram />
                             </span>{" "}
                             {""}
-                            Instragram
+                            Instagram
                         </p>
                         <p className="flex items-center gap-[1rem] cursor-pointer transition-all ease-in py-[0.3rem] px-[0.5rem] hover:bg-icons-color hover:text-main-bg hover:rounded-[2rem]">
                             <span className="text-[1.5rem]">
-                            <TiSocialLinkedin />
+                            <TiSocialTwitter />
                             </span>{" "}
                             {""}
-                            LinkedIn
+                            Twitter
                         </p>
                         <p className="flex items-center gap-[1rem] cursor-pointer transition-all ease-in py-[0.3rem] px-[0.5rem] hover:bg-icons-color hover:text-main-bg hover:rounded-[2rem]">
                             <span className="text-[1.5rem]">
