@@ -215,7 +215,7 @@ export const NFTDescription = ({nft}) => {
               </div>
   
               <div className="flex mt-[2rem] gap-[4rem]">
-                {currentAccount == nft.seller.toLowerCase() ? (
+                {currentAccount == nft?.seller?.toLowerCase() ? (
                   <p className="items-center flex">
                     You cannot buy your own NFT
                   </p>

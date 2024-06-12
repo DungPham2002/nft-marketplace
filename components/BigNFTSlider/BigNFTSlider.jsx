@@ -197,7 +197,7 @@ export const BigNFTSlider = () => {
             <Image
               src={sliderData[idNumber].nftImage}
               alt="NFT IMAGE"
-              className="rounded-[2rem]"
+              className="rounded-[2rem] h-[680px] w-[680px]"
             />
 
             <div className="absolute top-[3rem] right-[3rem] flex items-center gap-[1rem] text-[1.2rem] bg-icons-color text-shadow-dark py-[0.5rem] px-[1rem] rounded-[5rem]">

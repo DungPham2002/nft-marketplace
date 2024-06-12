@@ -6,10 +6,7 @@ import { getTopCreators } from "@/services/getTopCreators";
 
 
 export default function Home() {  
-  const { checkIfWalletConnected, currentAccount } = useContext(NFTMarketplaceContext);
-  useEffect(() => {
-    checkIfWalletConnected()
-  }, []);
+  const { currentAccount } = useContext(NFTMarketplaceContext);
 
   const { fetchNFTs } = useContext(NFTMarketplaceContext);
   const [nfts, setNfts] = useState([]);

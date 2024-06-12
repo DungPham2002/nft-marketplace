@@ -96,14 +96,7 @@ export const NavBar = () => {
       }
     };
 
-    const { currentAccount } = useContext(NFTMarketplaceContext);
-    const [userProfile, setUserProfile] = useState(null);
-
-    useEffect(() => {
-      getUserProfile().then((user) => {
-        setUserProfile(user);
-      });
-    }, []);
+    const { currentAccount, userProfile } = useContext(NFTMarketplaceContext);
   
     return (
       <div className="w-full z-[11111] p-6 relative">
@@ -179,7 +172,7 @@ export const NavBar = () => {
                   onClick={() => openProfile()}
                   className="rounded-[50%] h-[40px] w-[40px]" />
   
-                {profile && <Profile currentAccount={currentAccount} avatar={userProfile?.avatar} />}
+                {profile && <Profile currentUser={userProfile} />}
 
               </div>
             </div>

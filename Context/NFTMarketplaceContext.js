@@ -10,6 +10,7 @@ import React, { Children, useEffect, useState } from "react";
 import axios from "axios";
 import Web3Modal from "web3modal";
 import { logIn } from "@/api/auth.api";
+import { getUserProfile } from "@/api/user.api";
 
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(
@@ -54,6 +55,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   const [currentAccount, setCurrentAccount] = useState("");
   const [accountBalance, setAccountBalance] = useState("");
+  const [userProfile, setUserProfile] = useState(null);
   const router = useRouter();
 
   const checkIfWalletConnected = async () => {
@@ -62,10 +64,14 @@ export const NFTMarketplaceProvider = ({ children }) => {
       const accounts = await window.ethereum.request({
         method: "eth_accounts",
       });
-      if (accounts.length) {
-        setCurrentAccount(accounts[0]);
+      if (localStorage.getItem('accessToken') === null) {
+        setCurrentAccount("");
       } else {
-        console.log("No account found");
+        if (accounts.length) {
+          setCurrentAccount(accounts[0]);
+        } else {
+          console.log("No account found");
+        }
       }
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -79,7 +85,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   useEffect(() => {
     checkIfWalletConnected();
-  }, []);
+  }, [])
+
 
   const connectWallet = async () => {
     try {
@@ -88,8 +95,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         method: "eth_requestAccounts",
       });
       setCurrentAccount(accounts[0]);
-      signMessage(accounts[0])
-      // window.location.reload();
+      signMessage(accounts[0]);
     } catch (error) {
       console.log(error);
     }
@@ -108,6 +114,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
         params: [message, account],
       });
       await logIn(account, signature);
+      getUserProfile().then((user) => {
+        setUserProfile(user);
+      });
       router.push('/');
       console.log(`Signature for account ${account}:`, signature);
 
@@ -118,7 +127,12 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   const logOut = () => {
     setCurrentAccount("");
+    localStorage.clear();
+    getUserProfile().then((user) => {
+      setUserProfile(user);
+    });
     console.log("User signed out");
+    return true;
   };
 
   const uploadToPinata = async (file) => {
@@ -483,6 +497,13 @@ export const NFTMarketplaceProvider = ({ children }) => {
     };
   }, []);
 
+  useEffect(() => {
+    checkIfWalletConnected();
+    getUserProfile().then((user) => {
+      setUserProfile(user);
+    });
+  }, []);
+
   return (
     <NFTMarketplaceContext.Provider
       value={{
@@ -506,6 +527,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         endAuction,
         createAuction,
         logOut,
+        userProfile
       }}
     >
       {children}
