@@ -248,7 +248,6 @@ mapping(uint256 => Auction) private idToAuction;
         if (auction.highestBidder == address(0)) {
             _transfer(address(this), auction.seller, tokenId);
         } else {
-            _itemsSold.increment();
             _transfer(address(this), auction.highestBidder, tokenId);
             payable(owner).transfer(listingPrice);
             auction.seller.transfer(auction.highestBid - listingPrice);

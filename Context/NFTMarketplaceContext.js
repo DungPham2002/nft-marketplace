@@ -490,7 +490,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(checkAndEndAuctions, 300000);
+    const interval = setInterval(checkAndEndAuctions, 60000);
     checkAndEndAuctions();
     return () => {
       clearInterval(interval);
