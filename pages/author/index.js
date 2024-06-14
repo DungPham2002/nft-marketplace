@@ -5,6 +5,8 @@ import { FollowerTabCard } from "@/components/FollowerTab/FollowerTabCard/Follow
 import images from "@/images";
 import { useContext, useEffect, useState } from "react";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
+import { getUserByAddress } from "@/api/user.api";
+import { BsSearch, BsArrowRight } from "react-icons/bs";
 
 export default function Author() {
     const followerArray = [
@@ -40,43 +42,72 @@ export default function Author() {
       },
     ];
   
-    const [collectiables, setCollectiables] = useState(true);
+    const [listed, setListed] = useState(true);
     const [created, setCreated] = useState(false);
     const [like, setLike] = useState(false);
     const [follower, setFollower] = useState(false);
     const [following, setFollowing] = useState(false);
     const [auction, setAuction] = useState(false);
-  
-    const { fetchMyNFTsorListedNFTs, currentAccount, fetchActiveAuctions } = useContext(NFTMarketplaceContext);
+    const [userByAddress, setUserByAddress] = useState("");
+    const { fetchMyNFTsorListedNFTs, currentAccount, fetchActiveAuctions} = useContext(NFTMarketplaceContext);
 
     const [nfts, setNfts] = useState([]);
     const [myNFTs, setMyNFTs] = useState([]);
     const [auctionList, setAuctionList] = useState([]);
 
-    useEffect(() => {
-      fetchMyNFTsorListedNFTs("fetchItemsListed").then((items) => {
-        setNfts(items);
-      });
-    }, []);
-
-    useEffect(() => {
-      fetchMyNFTsorListedNFTs("fetchMyNFTs").then((items) => {
-        setMyNFTs(items);
-      });
-    }, []);
 
     useEffect(() => {
       fetchActiveAuctions().then((items) => {
         setAuctionList(items)
       });
-    }, [])
+    }, [currentAccount]);
+
+    useEffect(() => {
+      if (currentAccount) {
+        getUserByAddress(currentAccount).then((item) => {
+          setUserByAddress(item)
+        });
+        fetchMyNFTsorListedNFTs("fetchItemsListed").then((items) => {
+          setNfts(items);
+        });
+        fetchMyNFTsorListedNFTs("fetchMyNFTs").then((items) => {
+          setMyNFTs(items);
+        });
+      }
+    }, [currentAccount]);
+
+    const handleSearchAddress = async(address) => {
+      if (!address) {
+        getUserByAddress(currentAccount).then((item) => {
+          setUserByAddress(item)
+        })
+      } else {
+        getUserByAddress(address).then((item) => {
+          setUserByAddress(item)
+          setNfts(item.listedNft)
+          setMyNFTs(item.createdNft)
+        })
+      }
+    }
 
     return (
       <div className="">
         <Banner bannerImage={images.creatorbackground2} />
-        <AuthorProfileCard currentAccount={currentAccount}/>
+        <form className="w-full">
+          <div className="w-[40%] my-0 mx-auto bg-main-bg text-main-bg flex rounded-[5rem] items-center mt-[8rem] mb-[3rem] shadow-shadow">
+            <BsSearch className="text-[3rem] py-[0.5rem] px-[0.8rem] cursor-pointer text-icons-color" />
+            <input
+              className="w-[85%] border-0 outline-[0] p-[2rem] bg-main-bg placeholder:text-icons-color placeholder:text-[1.2rem] text-icons-color"
+              type="text"
+              placeholder="Type address..."
+              onChange={(e)=>{handleSearchAddress(e.target.value)}}
+            />
+            <BsArrowRight className="text-[3rem] py-[0.5rem] px-[1  rem] cursor-pointer text-icons-color" />
+          </div>
+        </form>
+        <AuthorProfileCard userByAddress={userByAddress}/>
         <AuthorTabs
-          setCollectiables={setCollectiables}
+          setListed={setListed}
           setCreated={setCreated}
           setLike={setLike}
           setFollower={setFollower}
@@ -85,7 +116,7 @@ export default function Author() {
         />
   
         <AuthorNFTCardBox
-          collectiables={collectiables}
+          listed={listed}
           created={created}
           like={like}
           follower={follower}

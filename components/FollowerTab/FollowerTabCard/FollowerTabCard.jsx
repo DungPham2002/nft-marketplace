@@ -12,9 +12,9 @@ export const FollowerTabCard = ({ i, el }) => {
 
   useEffect(() => {
     getUserByAddress(el.seller).then((item) => {
-      setUserAvatar(item.avatar)
+      setUserAvatar(item.user.avatar)
     })
-  })
+  }, []);
 
   const followMe = () => {
     if (!following) {

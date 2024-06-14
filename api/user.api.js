@@ -8,7 +8,7 @@ export const getUserByAddress = async(address) => {
         );
         return response.data;
     } catch (error) {
-        console.error('Error logging in:', error);
+        console.error(error);
         throw error;
     }
 };

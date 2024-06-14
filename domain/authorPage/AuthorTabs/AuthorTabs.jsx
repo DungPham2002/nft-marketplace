@@ -3,7 +3,7 @@ import { TiArrowSortedDown, TiArrowSortedUp, TiTick } from "react-icons/ti";
 
 
 export const AuthorTabs = ({
-  setCollectiables,
+  setListed,
   setCreated,
   setLike,
   setFollower,
@@ -35,7 +35,7 @@ export const AuthorTabs = ({
   const openTab = (e) => {
     const btnText = e.target.innerText;
     if (btnText == "Listed NFT") {
-      setCollectiables(true);
+      setListed(true);
       setCreated(false);
       setFollower(false);
       setFollowing(false);
@@ -43,7 +43,7 @@ export const AuthorTabs = ({
       setAuction(false);
       setActiveBtn(1);
     } else if (btnText == "Own NFT") {
-      setCollectiables(false);
+      setListed(false);
       setCreated(true);
       setFollower(false);
       setFollowing(false);
@@ -51,7 +51,7 @@ export const AuthorTabs = ({
       setAuction(false);
       setActiveBtn(2);
     } else if (btnText == "Liked") {
-      setCollectiables(false);
+      setListed(false);
       setCreated(false);
       setFollower(false);
       setFollowing(false);
@@ -59,7 +59,7 @@ export const AuthorTabs = ({
       setAuction(false);
       setActiveBtn(3);
     } else if (btnText == "Following") {
-      setCollectiables(false);
+      setListed(false);
       setCreated(false);
       setFollower(false);
       setFollowing(true);
@@ -67,7 +67,7 @@ export const AuthorTabs = ({
       setAuction(false);
       setActiveBtn(4);
     } else if (btnText == "Followers") {
-      setCollectiables(false);
+      setListed(false);
       setCreated(false);
       setFollower(true);
       setFollowing(false);
@@ -75,7 +75,7 @@ export const AuthorTabs = ({
       setAuction(false);
       setActiveBtn(5);
     } else if (btnText == "Auction") {
-      setCollectiables(false);
+      setListed(false);
       setCreated(false);
       setFollower(false);
       setFollowing(false);
