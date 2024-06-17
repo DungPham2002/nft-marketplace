@@ -33,3 +33,35 @@ export const createNft = async (
   );
   return response.data;
 };
+
+export const reSellNft = async (tokenId, formInputPrice) => {
+  const token = localStorage.getItem("accessToken");
+  const price = formInputPrice;
+  const response = await axios.put(
+  `${BASE_API_URL}/nfts/resell-nft/${tokenId}/${price}`,
+  {},
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  }
+  );
+  return response.data;
+};
+
+
+export const buyNft = async (address, tokenId) => {
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.put(
+    `${BASE_API_URL}/nfts/buy-nft/${address}/${tokenId}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};

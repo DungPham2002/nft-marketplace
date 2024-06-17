@@ -11,6 +11,7 @@ import axios from "axios";
 import Web3Modal from "web3modal";
 import { logIn } from "@/api/auth.api";
 import { getUserProfile } from "@/api/user.api";
+import { buyNft, reSellNft } from "@/api/nft.api";
 
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(
@@ -64,7 +65,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       const accounts = await window.ethereum.request({
         method: "eth_accounts",
       });
-      if (localStorage.getItem('accessToken') === null) {
+      if (localStorage.getItem("accessToken") === null) {
         setCurrentAccount("");
       } else {
         if (accounts.length) {
@@ -85,8 +86,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   useEffect(() => {
     checkIfWalletConnected();
-  }, [])
-
+  }, []);
 
   const connectWallet = async () => {
     try {
@@ -110,16 +110,15 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
       const message = "Welcome To Marketplace";
       const signature = await window.ethereum.request({
-        method: 'personal_sign',
+        method: "personal_sign",
         params: [message, account],
       });
       await logIn(account, signature);
       getUserProfile().then((user) => {
         setUserProfile(user);
       });
-      router.push('/');
+      router.push("/");
       console.log(`Signature for account ${account}:`, signature);
-
     } catch (error) {
       console.log("Error signing message:", error);
     }
@@ -183,7 +182,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         return false;
       }
     } catch (error) {
-      console.log("Error when creating nft",error);
+      console.log("Error when creating nft", error);
     }
   };
 
@@ -200,6 +199,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
             value: listingPrice.toString(),
           });
       await transaction.wait();
+      if (isReselling) {
+        await reSellNft(id, formInputPrice);
+      }
       return true;
     } catch (error) {
       console.log("Error when creating sale", error);
@@ -247,7 +249,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   useEffect(() => {
     // if (currentAccount) {
-      fetchNFTs();
+    fetchNFTs();
     // }
   }, []);
 
@@ -296,16 +298,18 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   const buyNFT = async (nft) => {
     try {
-      const contract = await connectingWithSmartContract();
-      const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-      const transaction = await contract.createMarketSale(nft.tokenId, {
-        value: price,
-      });
-
-      await transaction.wait();
-      router.push("/author");
+      if (currentAccount == userProfile.address.toLowerCase()) {
+        const contract = await connectingWithSmartContract();
+        const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
+        const transaction = await contract.createMarketSale(nft.tokenId, {
+          value: price,
+        });
+        await transaction.wait();
+        await buyNft(currentAccount, nft.tokenId);
+        router.push("/author");
+      }
     } catch (error) {
-      console.log("Error when buying NFT");
+      console.log("Error when buying NFT", error);
     }
   };
 
@@ -527,7 +531,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         endAuction,
         createAuction,
         logOut,
-        userProfile
+        userProfile,
       }}
     >
       {children}
