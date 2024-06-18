@@ -3,14 +3,9 @@ import { BASE_API_URL } from "@/datas";
 
 
 export const getUserByAddress = async(address) => {
-    try {
-        const response = await axios.get(`${BASE_API_URL}/users/profile/${address}`,
-        );
-        return response.data;
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    const response = await axios.get(`${BASE_API_URL}/users/profile/${address}`,
+    );
+    return response.data;
 };
 
 export const getUserProfile = async() => {

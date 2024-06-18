@@ -219,7 +219,7 @@ export const NFTDescription = ({nft}) => {
                   <p className="items-center flex">
                     You cannot buy your own NFT
                   </p>
-                ) : currentAccount == nft.owner.toLowerCase() ? (
+                ) : currentAccount == nft?.owner?.toLowerCase() ? (
                   <Button
                   icon={<FaWallet className="mr-[0.5rem]"/>}
                   btnName="List on Market"
@@ -235,7 +235,7 @@ export const NFTDescription = ({nft}) => {
                   classStyle="flex items-center"
                 />
                 )}
-                {currentAccount == nft.owner.toLowerCase() ? (
+                {currentAccount == nft?.owner?.toLowerCase() ? (
                   <Button
                   icon={<FaWallet className="mr-[0.5rem]"/>}
                   btnName="List on Auction"

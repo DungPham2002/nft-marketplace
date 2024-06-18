@@ -446,7 +446,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           duration
         );
         await transaction.wait();
-        listOnAuction(id, minBid, duration / 3600);
+        listOnAuction(id, minBid, duration );
         router.push("/search");
       }
     } catch (error) {
