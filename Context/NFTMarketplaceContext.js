@@ -214,7 +214,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
   const fetchNFTs = async () => {
     try {
       if (currentAccount) {
-        const provider = new ethers.providers.JsonRpcProvider();
+        const provider = new ethers.providers.JsonRpcProvider(NEXT_PUBLIC_SEPOLIA_API_KEY);
         const contract = fetchContract(provider);
         const data = await contract.fetchMarketItems();
         const items = await Promise.all(
@@ -250,9 +250,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // if (currentAccount) {
+    if (currentAccount) {
     fetchNFTs();
-    // }
+    }
   }, []);
 
   const fetchMyNFTsorListedNFTs = async (type) => {
