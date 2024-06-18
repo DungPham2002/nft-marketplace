@@ -26,7 +26,6 @@ export default function auctionNFT() {
     const auction = async() => {
         try {
             await createAuction(id, minBid, duration);
-            router.push("/search");
         } catch (error) {
             console.log("Error when create auction nft", error);
         }
@@ -42,7 +41,7 @@ export default function auctionNFT() {
                         <input
                         type="number"
                         min={1}
-                        placeholder="Resell Price"
+                        placeholder="Min Bid"
                         className="w-full border-[1px] border-solid border-icons-color p-[1rem] rounded-[1rem] bg-[transparent] mt-[0.5rem] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color"
                         onChange={(e) => setMinBid(e.target.value)}
                         />
@@ -50,7 +49,7 @@ export default function auctionNFT() {
                         <input
                         type="number"
                         min={1}
-                        placeholder="hour"
+                        placeholder="Hour"
                         className="w-full border-[1px] border-solid border-icons-color p-[1rem] rounded-[1rem] bg-[transparent] mt-[0.5rem] outline-none placeholder:text-[1.2rem] placeholder:text-icons-color"
                         onChange={(e) => setDuration(e.target.value * 60 * 60)}
                         />

@@ -140,7 +140,6 @@ mapping(uint256 => Auction) private idToAuction;
         payable(idToMarketItem[tokenId].seller).transfer(msg.value);
     }
 
-    /* Returns all unsold market items */
     function fetchMarketItems() public view returns (MarketItem[] memory) {
         uint256 itemCount = _tokenIds.current();
         uint256 unsoldItemCount = _tokenIds.current() - _itemsSold.current();
@@ -158,7 +157,6 @@ mapping(uint256 => Auction) private idToAuction;
         return items;
     }
 
-    /* Returns only items that a user has purchased */
     function fetchMyNFTs() public view returns (MarketItem[] memory) {
         uint256 totalItemCount = _tokenIds.current();
         uint256 itemCount = 0;

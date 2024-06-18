@@ -12,6 +12,8 @@ import Web3Modal from "web3modal";
 import { logIn } from "@/api/auth.api";
 import { getUserProfile } from "@/api/user.api";
 import { buyNft, reSellNft } from "@/api/nft.api";
+import { listOnAuction } from "@/api/auction.api";
+import { endBid, makeOffer } from "@/api/auction.api";
 
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(
@@ -435,14 +437,18 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   const createAuction = async (id, minBid, duration) => {
     try {
-      const contract = await connectingWithSmartContract();
-      const minBidPrice = ethers.utils.parseUnits(minBid, "ether");
-      const transaction = await contract.createAuction(
-        id,
-        minBidPrice,
-        duration
-      );
-      await transaction.wait();
+      if (currentAccount == userProfile.address.toLowerCase()) {
+        const contract = await connectingWithSmartContract();
+        const minBidPrice = ethers.utils.parseUnits(minBid, "ether");
+        const transaction = await contract.createAuction(
+          id,
+          minBidPrice,
+          duration
+        );
+        await transaction.wait();
+        listOnAuction(id, minBid, duration / 3600);
+        router.push("/search");
+      }
     } catch (error) {
       console.log("Error creating auction", error);
     }
@@ -454,19 +460,10 @@ export const NFTMarketplaceProvider = ({ children }) => {
       const transaction = await contract.bidOnAuction(tokenId, {
         value: ethers.utils.parseEther(bidAmount),
       });
-      transaction.wait();
+      await transaction.wait();
+      makeOffer(tokenId, bidAmount);
     } catch (error) {
       console.log("Error placing bid", error);
-    }
-  };
-
-  const endAuction = async (tokenId) => {
-    try {
-      const contract = await connectingWithSmartContract();
-      const transaction = await contract.endAuction(tokenId);
-      transaction.wait();
-    } catch (error) {
-      console.log("Error ending auction", error);
     }
   };
 
@@ -483,6 +480,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           console.log(`Ending auction for token ID ${auction.tokenId}`);
           const tx = await contract.endAuction(auction.tokenId);
           await tx.wait();
+          endBid(auction.tokenId);
           console.log(
             `Auction for token ID ${auction.tokenId} ended successfully`
           );
@@ -528,7 +526,6 @@ export const NFTMarketplaceProvider = ({ children }) => {
         getAllTransactions,
         fetchActiveAuctions,
         bidOnAuction,
-        endAuction,
         createAuction,
         logOut,
         userProfile,
