@@ -1,36 +1,77 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsImages } from "react-icons/bs";
 import Image from "next/image";
 import images from "@/images";
+import Link from "next/link";
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
+import { getLikeNft, likeNft, unLikeNft } from "@/api/nft.api";
 
-export const NFTCard = ({NFTData}) => {
-  const featureArray = [
-    images.nft_image_1,
-    images.nft_image_2,
-    images.nft_image_3,
-    images.nft_image_1,
-    images.nft_image_2,
-    images.nft_image_3,
-    images.nft_image_1,
-    images.nft_image_2,
-    images.nft_image_3
-  ];
+export const NFTCard = ({ NFTData }) => {
+  const { userProfile } = useContext(NFTMarketplaceContext);
 
-  const [like, setLike] = useState(true);
+  const [likes, setLikes] = useState({});
 
-  const likeNft = () => {
-    if (!like) {
-      setLike(true);
-    } else {
-      setLike(false);
+  useEffect(() => {
+    if (userProfile) {
+      NFTData?.forEach(async (nft) => {
+        if (userProfile.id !== 0) {
+          const res = await getLikeNft(userProfile.id, nft.tokenId);
+          setLikes((prevLikes) => ({
+            ...prevLikes,
+            [nft.tokenId]: res,
+          }));
+        } else {
+          setLikes((prevLikes) => ({
+            ...prevLikes,
+            [nft.tokenId]: { likeCount: nft.likes || 0, isLiked: false },
+          }));
+        }
+      });
+    }
+  }, [userProfile, NFTData]);
+
+  const handleLikeToggle = async (tokenId) => {
+    try {
+      if (likes[tokenId]?.isLiked) {
+        await unLikeNft(tokenId);
+        setLikes((prevLikes) => ({
+          ...prevLikes,
+          [tokenId]: {
+            ...prevLikes[tokenId],
+            isLiked: false,
+            likeCount: prevLikes[tokenId].likeCount - 1,
+          },
+        }));
+      } else {
+        await likeNft(tokenId);
+        setLikes((prevLikes) => ({
+          ...prevLikes,
+          [tokenId]: {
+            ...prevLikes[tokenId],
+            isLiked: true,
+            likeCount: prevLikes[tokenId].likeCount + 1,
+          },
+        }));
+      }
+    } catch (error) {
+      console.error('Error liking/unliking NFT:', error);
     }
   };
 
   return (
     <div className="w-[80%] my-0 mx-auto grid grid-cols-3 gap-[3rem] mb-[10rem]">
       {NFTData?.map((el, i) => (
-        <div className="p-[1rem] bg-shadow-light rounded-[1rem] grid grid-cols-4 grid-rows-4 cursor-pointer transition-all ease-in hover:shadow-shadow-1 group" key={i + 1}>
+        <Link
+          href={{ pathname: "/NFT-details", query: { 
+            ...el, 
+            endTime: el.endTime?.toString(), 
+            likeCount: likes[el.tokenId]?.likeCount || 0,
+            isLiked: likes[el.tokenId]?.isLiked || false, } 
+          }}
+          key={i + 1}
+          className="p-[1rem] bg-shadow-light rounded-[1rem] grid grid-cols-4 grid-rows-4 cursor-pointer transition-all ease-in hover:shadow-shadow-1 group"
+        >
           <div className="col-start-1 col-end-[-1] row-start-1 row-end-[-1] overflow-hidden rounded-[1rem]">
             <Image
               src={el.image}
@@ -45,16 +86,17 @@ export const NFTCard = ({NFTData}) => {
             <div className="m-[1rem] bg-icons-color text-main-bg rounded-[2rem] py-[0.5rem] px-[1rem]">
               <div
                 className="flex items-center text-[1.2rem] gap-[0.5rem]"
-                onClick={() => likeNft()}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLikeToggle(el.tokenId);
+                }}
               >
-                {like ? (
-                  <AiOutlineHeart />
+                {likes[el.tokenId]?.isLiked ? (
+                  <AiFillHeart className="text-[red]" />
                 ) : (
-                  <AiFillHeart
-                    className="text-[red]"
-                  />
+                  <AiOutlineHeart />
                 )}
-                {""} 22
+                {""} {likes[el.tokenId]?.likeCount || 0}
               </div>
             </div>
 
@@ -69,7 +111,9 @@ export const NFTCard = ({NFTData}) => {
           <div className="col-start-1 col-end-[-1] row-start-3 row-end-[-1] items-end grid grid-cols-[1.5fr,1fr] overflow-hidden">
             <div className="ml-[-3rem] pb-[0.6rem] bg-shadow-light skew-x-45 rounded-tr-[1rem]">
               <div className="pl-[4rem] -skew-x-45">
-                <h4 className="text-[1.3rem] font-bold my-[0.2rem]">{el.name} #{el.tokenId}</h4>
+                <h4 className="text-[1.3rem] font-bold my-[0.2rem]">
+                  {el.name} #{el.tokenId}
+                </h4>
 
                 <div className="flex justify-between items-end">
                   <div
@@ -78,19 +122,17 @@ export const NFTCard = ({NFTData}) => {
                     <small className="p-[0.5rem] py-[0.5rem] rounded-[0.2rem] text-main-bg bg-icons-color">Current Bid</small>
                     <p className="text-center pt-[0.2rem] pl-0 pr-0 pb-0 font-semibold">{el.price} ETH</p>
                   </div>
-                  <div
-                    className="{Style.NFTCard_box_update_details_price_box_stock}"
-                  >
+                  <div className="{Style.NFTCard_box_update_details_price_box_stock}">
                     <small>61 in stock</small>
                   </div>
                 </div>
               </div>
             </div>
             <div className="text-[1.5rem] my-[1.5rem] ml-[6rem] text-icons-color z-[11111]">
-              <BsImages className=""/>
+              <BsImages className="" />
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

@@ -18,12 +18,13 @@ import {
 import { BiTransferAlt, BiDollar } from "react-icons/bi";
 import images from "@/images";
 import { Button } from "@/components/componentsindex";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NFTTabs } from "../NFTTabs/NFTTabs";
 import Link from "next/link";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import { useRouter } from "next/router";
 import { CountDownTimer } from "./CountDownTimer/CountDownTimer";
+import { getUserByAddress } from "@/api/user.api";
 
 
 
@@ -33,6 +34,7 @@ export const NFTDescription = ({nft}) => {
     const [history, setHistory] = useState(true);
     const [provanance, setProvanance] = useState(false);
     const [owner, setOwner] = useState(false);
+    const [authorProfile, setAuthorProfile] = useState("");
 
     const { currentAccount, buyNFT } = useContext(NFTMarketplaceContext);
     const router = useRouter();
@@ -101,6 +103,14 @@ export const NFTDescription = ({nft}) => {
         setHistory(true);
       }
     };
+
+    useEffect(() => {
+      if (nft.seller != "") {
+        getUserByAddress(nft.seller).then((item) => {
+          setAuthorProfile(item)
+        })
+      }
+    }, [nft])
   
     return (
       <div className="w-full">
@@ -162,7 +172,7 @@ export const NFTDescription = ({nft}) => {
             <div className="flex items-center gap-[2rem] pb-[1.5rem]">
               <div className="flex items-center self-center gap-[1rem]">
                 <Image
-                  src={images.user1}
+                  src={authorProfile.avatar ||images.user1}
                   alt="profile"
                   width={40}
                   height={40}
@@ -172,7 +182,7 @@ export const NFTDescription = ({nft}) => {
                   <small className="font-medium text-[1rem]">Creator</small> <br />
                   <Link href={{ pathname: "/author", query: `${nft.seller}` }}>
                     <span className="font-extrabold flex items-center">
-                      Karli Costa <MdVerified className="ml-[0.2rem]"/>
+                      {authorProfile.name || "UnName"} <MdVerified className="ml-[0.2rem]"/>
                     </span>
                   </Link>
                 </div>

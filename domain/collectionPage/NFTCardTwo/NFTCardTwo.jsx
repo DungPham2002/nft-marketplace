@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import { BsImage } from "react-icons/bs";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -6,34 +6,84 @@ import { MdVerified, MdTimer } from "react-icons/md";
 import { LikeProfile } from "@/components/componentsindex";
 import Link from "next/link";
 import { CountDownTimer } from "./CountDownTimer/CountDownTimer";
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
+import { getLikeNft, likeNft, unLikeNft } from "@/api/nft.api";
 
 export const NFTCardTwo = ({ NFTData }) => {
-    const [like, setLike] = useState(false);
-    const [likeInc, setLikeInc] = useState(21);
+    const { userProfile } = useContext(NFTMarketplaceContext);
 
-    const likeNFT = () => {
-        if (!like) {
-        setLike(true);  
-        setLikeInc(23);
+    const [likes, setLikes] = useState({});
+
+    useEffect(() => {
+        if (userProfile) {
+        NFTData?.forEach(async (nft) => {
+            if (userProfile.id !== 0) {
+            const res = await getLikeNft(userProfile.id, nft.tokenId);
+            setLikes((prevLikes) => ({
+                ...prevLikes,
+                [nft.tokenId]: res,
+            }));
+            } else {
+            setLikes((prevLikes) => ({
+                ...prevLikes,
+                [nft.tokenId]: { likeCount: nft.likes || 0, isLiked: false },
+            }));
+            }
+        });
+        }
+    }, [userProfile, NFTData]);
+
+    const handleLikeToggle = async (tokenId) => {
+        try {
+        if (likes[tokenId]?.isLiked) {
+            await unLikeNft(tokenId);
+            setLikes((prevLikes) => ({
+            ...prevLikes,
+            [tokenId]: {
+                ...prevLikes[tokenId],
+                isLiked: false,
+                likeCount: prevLikes[tokenId].likeCount - 1,
+            },
+            }));
         } else {
-        setLike(false);
-        setLikeInc(23 + 1);
+            await likeNft(tokenId);
+            setLikes((prevLikes) => ({
+            ...prevLikes,
+            [tokenId]: {
+                ...prevLikes[tokenId],
+                isLiked: true,
+                likeCount: prevLikes[tokenId].likeCount + 1,
+            },
+            }));
+        }
+        } catch (error) {
+        console.error('Error liking/unliking NFT:', error);
         }
     };
     return (
         <div className="w-[80%] my-0 mx-auto grid grid-cols-4 gap-[3rem] mb-[14rem]">
         {NFTData?.map((el, i) => (
-            <Link href={{ pathname:"/NFT-details", query:  { ...el, endTime: el.endTime?.toString() } }} key={i + 1}>
+            <Link href={{ pathname:"/NFT-details", query:  { 
+                ...el, 
+                endTime: el.endTime?.toString(), 
+                likeCount: likes[el.tokenId]?.likeCount || 0,
+                isLiked: likes[el.tokenId]?.isLiked || false, } }} key={i + 1}>
                 <div className="grid cursor-pointer transition-all ease-in rounded-[1rem] hover:shadow-shadow" key={i + 1}>
                 <div className="p-[1rem] col-start-1 col-end-[-1] row-start-1 row-end-[-1] z-[111111]">
                     <div className="{Style.NFTCardTwo_box_like_box}">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between" >
                         <BsImage className="text-[2rem] text-icons-color" />
-                        <p className="flex items-center gap-[1rem] text-[1.2rem] bg-icons-color text-main-bg rounded-[2rem] py-0 px-[0.5rem]" onClick={() => likeNFT()}>
-                        {like ? <AiOutlineHeart className=""/> : <AiFillHeart className="text-[red]"/>}
-                        {""}
-                        <span>{likeInc + 1}</span>
-                        </p>
+                        <div className="flex items-center gap-[1rem] text-[1.2rem] bg-icons-color text-main-bg rounded-[2rem] py-0 px-[0.5rem]" onClick={(e) => {
+                            e.preventDefault();
+                            handleLikeToggle(el.tokenId);
+                            }}>
+                        {likes[el.tokenId]?.isLiked ? (
+                        <AiFillHeart className="text-[red]" />
+                        ) : (
+                        <AiOutlineHeart />
+                        )}
+                        {""} {likes[el.tokenId]?.likeCount || 0}
+                        </div>
                     </div>
                     </div>
                 </div>

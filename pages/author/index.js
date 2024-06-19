@@ -73,7 +73,7 @@ export default function Author() {
       setUserByAddress(user);
 
       const activeAuctions = await fetchActiveAuctions();
-      const userAuctions = activeAuctions.filter((auction) => auction.seller.toLowerCase() === address.toLowerCase());
+      const userAuctions = activeAuctions?.filter((auction) => auction.seller.toLowerCase() === address.toLowerCase());
       setAuctionList(userAuctions);
 
       const listedNfts = await fetchMyNFTsorListedNFTs("fetchItemsListed");
@@ -82,7 +82,7 @@ export default function Author() {
 
     const updateMyNFTs = async () => {
       const fetchedMyNFTs = await fetchMyNFTsorListedNFTs("fetchMyNFTs");
-      const filteredMyNFTs = fetchedMyNFTs.filter((nft) => {
+      const filteredMyNFTs = fetchedMyNFTs?.filter((nft) => {
         return !auctionList.some((auction) => auction.tokenId === nft.tokenId);
       });
       setMyNFTs(filteredMyNFTs);
