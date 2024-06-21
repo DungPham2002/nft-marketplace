@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import { BsImage } from "react-icons/bs";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { MdVerified, MdTimer } from "react-icons/md";
+import { MdTimer } from "react-icons/md";
 import { LikeProfile } from "@/components/componentsindex";
 import Link from "next/link";
 import { CountDownTimer } from "./CountDownTimer/CountDownTimer";
@@ -13,7 +13,7 @@ export const NFTCardTwo = ({ NFTData }) => {
     const { userProfile } = useContext(NFTMarketplaceContext);
 
     const [likes, setLikes] = useState({});
-
+    const [isLiking, setIsLiking] = useState(false);
     useEffect(() => {
         if (userProfile) {
         NFTData?.forEach(async (nft) => {
@@ -34,16 +34,18 @@ export const NFTCardTwo = ({ NFTData }) => {
     }, [userProfile, NFTData]);
 
     const handleLikeToggle = async (tokenId) => {
+        if (isLiking) return;
+        setIsLiking(true);
         try {
-        if (likes[tokenId]?.isLiked) {
-            await unLikeNft(tokenId);
-            setLikes((prevLikes) => ({
-            ...prevLikes,
-            [tokenId]: {
-                ...prevLikes[tokenId],
-                isLiked: false,
-                likeCount: prevLikes[tokenId].likeCount - 1,
-            },
+            if (likes[tokenId]?.isLiked) {
+                await unLikeNft(tokenId);
+                setLikes((prevLikes) => ({
+                ...prevLikes,
+                [tokenId]: {
+                    ...prevLikes[tokenId],
+                    isLiked: false,
+                    likeCount: prevLikes[tokenId].likeCount - 1,
+                },
             }));
         } else {
             await likeNft(tokenId);
@@ -58,6 +60,8 @@ export const NFTCardTwo = ({ NFTData }) => {
         }
         } catch (error) {
         console.error('Error liking/unliking NFT:', error);
+        } finally {
+            setIsLiking(false);
         }
     };
     return (

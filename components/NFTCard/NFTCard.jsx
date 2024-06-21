@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsImages } from "react-icons/bs";
 import Image from "next/image";
-import images from "@/images";
 import Link from "next/link";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import { getLikeNft, likeNft, unLikeNft } from "@/api/nft.api";
@@ -11,6 +10,7 @@ export const NFTCard = ({ NFTData }) => {
   const { userProfile } = useContext(NFTMarketplaceContext);
 
   const [likes, setLikes] = useState({});
+  const [isLiking, setIsLiking] = useState(false);
 
   useEffect(() => {
     if (userProfile) {
@@ -32,6 +32,8 @@ export const NFTCard = ({ NFTData }) => {
   }, [userProfile, NFTData]);
 
   const handleLikeToggle = async (tokenId) => {
+    if (isLiking) return;
+    setIsLiking(true);
     try {
       if (likes[tokenId]?.isLiked) {
         await unLikeNft(tokenId);
@@ -56,6 +58,8 @@ export const NFTCard = ({ NFTData }) => {
       }
     } catch (error) {
       console.error('Error liking/unliking NFT:', error);
+    } finally {
+      setIsLiking(false);
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Image from "next/image";
 import {
   MdVerified,
@@ -8,7 +8,6 @@ import {
 import { FiCopy } from "react-icons/fi";
 import {
   TiSocialFacebook,
-  TiSocialLinkedin,
   TiSocialYoutube,
   TiSocialInstagram,
   TiSocialTwitter,
@@ -16,10 +15,40 @@ import {
 import { BsThreeDots } from "react-icons/bs";
 import images from "@/images";
 import { Button } from "@/components/componentsindex";
+import { getFollowUser, followUser, unfollowUser } from "@/api/follow.api";
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 
 export const AuthorProfileCard = ({ userByAddress }) => {
   const [share, setShare] = useState(false);
   const [report, setReport] = useState(false);
+  const [following, setFollowing] = useState(false);
+
+  const { userProfile } = useContext(NFTMarketplaceContext);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userProfile) {
+        const followStatus = await getFollowUser(userProfile?.id, userByAddress?.user?.address);
+        setFollowing(followStatus?.isFollowed);
+      }
+    };
+
+    fetchData();
+  }, [userByAddress]);
+
+  const followMe = async () => {
+    try {
+      if (following) {
+        await unfollowUser(userByAddress.user.address);
+        setFollowing(false);
+      } else {
+        await followUser(userByAddress.user.address);
+        setFollowing(true);
+      }
+    } catch (error) {
+      console.error("Error following/unfollowing user:", error);
+    }
+  };
 
   //copyAddress function
   const copyAddress = () => {
@@ -119,7 +148,8 @@ export const AuthorProfileCard = ({ userByAddress }) => {
         </div>
 
         <div className="flex items-center self-start gap-[2rem] relative">
-          <Button btnName="Follow" handleClick={() => {}} />
+          {following ? (<Button btnName="UnFollow" handleClick={followMe} />) : (<Button btnName="Follow" handleClick={followMe} />)}
+
           <MdCloudUpload
             onClick={() => openShare()}
             className="text-[2.5rem] cursor-pointer"

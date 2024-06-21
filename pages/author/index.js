@@ -1,47 +1,19 @@
 import { AuthorNFTCardBox, AuthorProfileCard, AuthorTabs } from "@/domain/authorPage/authorIndex";
 import { Banner } from "@/domain/collectionPage/collectionIndex";
 import { Brand, Title } from "@/components/componentsindex";
-import { FollowerTabCard } from "@/components/FollowerTab/FollowerTabCard/FollowerTabCard";
 import images from "@/images";
 import { useContext, useEffect, useState } from "react";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import { getUserByAddress } from "@/api/user.api";
 import { BsSearch, BsArrowRight } from "react-icons/bs";
+import { getListNftLiked, getListNftSell, getListOwnerNft, getListSoldNft } from "@/api/nft.api";
+import { getListFollower, getListFollowing } from "@/api/follow.api";
+import { useRouter } from "next/router";
+
+
+
 
 export default function Author() {
-    const followerArray = [
-      {
-        background: images.creatorbackground1,
-        user: images.user1,
-        seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-      },
-      {
-        background: images.creatorbackground2,
-        user: images.user2,
-        seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-      },
-      {
-        background: images.creatorbackground3,
-        user: images.user3,
-        seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-      },
-      {
-        background: images.creatorbackground4,
-        user: images.user4,
-        seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-      },
-      {
-        background: images.creatorbackground5,
-        user: images.user5,
-        seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-      },
-      {
-        background: images.creatorbackground6,
-        user: images.user6,
-        seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-      },
-    ];
-  
     const [listed, setListed] = useState(true);
     const [created, setCreated] = useState(false);
     const [like, setLike] = useState(false);
@@ -49,24 +21,31 @@ export default function Author() {
     const [following, setFollowing] = useState(false);
     const [auction, setAuction] = useState(false);
     const [userByAddress, setUserByAddress] = useState("");
-    const { fetchMyNFTsorListedNFTs, currentAccount, fetchActiveAuctions } = useContext(NFTMarketplaceContext);
+    const { currentAccount, fetchActiveAuctions } = useContext(NFTMarketplaceContext);
 
     const [nfts, setNfts] = useState([]);
     const [myNFTs, setMyNFTs] = useState([]);
     const [auctionList, setAuctionList] = useState([]);
+    const [likedList, setLikedList] = useState([])
     const [address, setAddress] = useState("");
+    const [followerList, setFollowerList] = useState([]);
+    const [followingList, setFollowingList] = useState([]);
+    const router = useRouter();
+
+    useEffect(() => {
+      const { query } = router;
+      const addressKey = Object.keys(query)[0];
+      if (addressKey) {
+        setAddress(addressKey);
+        handleSearchAddress(addressKey);
+      }
+    }, [router.query]);
 
     useEffect(() => {
       if (currentAccount) {
         fetchUserData(currentAccount);
       }
     }, [currentAccount]);
-
-    useEffect(() => {
-      if (userByAddress && userByAddress.createdNft) {
-        updateMyNFTs();
-      }
-    }, [userByAddress, auctionList]);
 
     const fetchUserData = async (address) => {
       const user = await getUserByAddress(address);
@@ -76,16 +55,28 @@ export default function Author() {
       const userAuctions = activeAuctions?.filter((auction) => auction.seller.toLowerCase() === address.toLowerCase());
       setAuctionList(userAuctions);
 
-      const listedNfts = await fetchMyNFTsorListedNFTs("fetchItemsListed");
-      setNfts(listedNfts);
-    };
+      const listedNfts = await getListSoldNft(address);
+      console.log(listedNfts)
+      const filteredListedNFTs = listedNfts?.filter((nft) => {
+        return !auctionList.some((auction) => auction.tokenId === nft.tokenId);
+      });
+      setNfts(filteredListedNFTs);
+      console.log(nfts)
 
-    const updateMyNFTs = async () => {
-      const fetchedMyNFTs = await fetchMyNFTsorListedNFTs("fetchMyNFTs");
+      const fetchedMyNFTs = await getListOwnerNft(address);
       const filteredMyNFTs = fetchedMyNFTs?.filter((nft) => {
         return !auctionList.some((auction) => auction.tokenId === nft.tokenId);
       });
       setMyNFTs(filteredMyNFTs);
+
+      const listLikedNfts = await getListNftLiked(address);
+      setLikedList(listLikedNfts)
+      
+      const listFollower = await getListFollower(address);
+      setFollowerList(listFollower);
+
+      const listFollowing = await getListFollowing(address);
+      setFollowingList(listFollowing);
     };
 
     const handleSearchAddress = async (address) => {
@@ -129,8 +120,11 @@ export default function Author() {
           myNFTs={myNFTs}
           nfts={nfts}
           auctionList={auctionList}
+          likedList={likedList}
+          followerList={followerList}
+          followingList={followingList}
         />
-        <Title
+        {/* <Title
           heading="Popular Creators"
           paragraph="Click on music icon and enjoy NTF music or audio"
         />
@@ -138,7 +132,7 @@ export default function Author() {
           {followerArray.map((el, i) => (
             <FollowerTabCard key={i} i={i} el={el} />
           ))}
-        </div>
+        </div> */}
   
         <Brand />
       </div>

@@ -21,7 +21,7 @@ export const Profile = ({currentUser}) => {
                 />
                 <div className="leading-2">
                     <p className="font-semibold">{currentUser?.name || "No Name"}</p>
-                    <small className="mt-[1rem]">{currentUser?.address.slice(0, 20)}...</small>
+                    <small className="mt-[1rem]">{currentUser?.address?.slice(0, 20)}...</small>
                 </div>
             </div>
 

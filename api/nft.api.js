@@ -96,6 +96,26 @@ export const unLikeNft = async (tokenId) => {
 };
 
 export const getLikeNft = async (userId, tokenId) => {
-  const response = await axios.post(`${BASE_API_URL}/nfts/nft-like-count/${userId}/${tokenId}`, {})
+  const response = await axios.post(
+    `${BASE_API_URL}/nfts/nft-like-count/${userId}/${tokenId}`,
+    {}
+  );
   return response.data;
-}
+};
+
+export const getListNftLiked = async (address) => {
+  const response = await axios.get(
+    `${BASE_API_URL}/nfts/liked-list/${address}`
+  );
+  return response.data;
+};
+
+export const getListSoldNft = async (address) => {
+  const response = await axios.get(`${BASE_API_URL}/nfts/sell-list/${address}`);
+  return response.data;
+};
+
+export const getListOwnerNft = async (address) => {
+  const response = await axios.get(`${BASE_API_URL}/nfts/own-list/${address}`);
+  return response.data;
+};

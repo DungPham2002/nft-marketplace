@@ -23,7 +23,6 @@ export const getUserProfile = async() => {
         }
     } catch (error) {
         console.error('Error logging in:', error);
-        throw error;
     }
 };
 
@@ -46,3 +45,4 @@ export const updateUserProfile = async(name, email, avatar, description, youtube
         throw error;
     }
 };
+

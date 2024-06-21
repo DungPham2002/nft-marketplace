@@ -6,75 +6,17 @@ import {
 } from "react-icons/ri";
 import { FollowerTabCard } from "./FollowerTabCard/FollowerTabCard";
 import images from "@/images";
+import { getTopFollower } from "@/api/follow.api";
+import { FollowerTabCardTwo } from "@/domain/authorPage/FollowerTabCardTwo/FolloweTabCardTwo";
 
 
 export const FollowerTab = ({TopCreator}) => {
-  // const CardArray = [
-  //   {
-  //     background: images.creatorbackground1,
-  //     user: images.user1,
-  //   },
-  //   {
-  //     background: images.creatorbackground2,
-  //     user: images.user2,
-  //   },
-  //   {
-  //     background: images.creatorbackground3,
-  //     user: images.user3,
-  //   },
-  //   {
-  //     background: images.creatorbackground4,
-  //     user: images.user4,
-  //   },
-  //   {
-  //     background: images.creatorbackground5,
-  //     user: images.user5,
-  //   },
-  //   {
-  //     background: images.creatorbackground6,
-  //     user: images.user6,
-  //   },
-  //   {
-  //     background: images.creatorbackground7,
-  //     user: images.user7,
-  //   },
-  //   {
-  //     background: images.creatorbackground10,
-  //     user: images.user10,
-  //   }
-  // ];
-  const FollowingArray = [
-    {
-      background: images.creatorbackground1,
-      user: images.user1,
-      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-    },
-    {
-      background: images.creatorbackground2,
-      user: images.user2,
-      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-    },
-    {
-      background: images.creatorbackground3,
-      user: images.user3,
-      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-    },
-    {
-      background: images.creatorbackground4,
-      user: images.user4,
-      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-    },
-    {
-      background: images.creatorbackground5,
-      user: images.user5,
-      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-    },
-    {
-      background: images.creatorbackground6,
-      user: images.user6,
-      seller: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
-    },
-  ];
+  const [topFollowers, setTopFollowers] = useState([]);
+  useEffect(() => {
+    getTopFollower().then((item) => {
+      setTopFollowers(item);
+    })
+  }, [])
   const NewsArray = [
     {
       background: images.creatorbackground1,
@@ -139,7 +81,7 @@ export const FollowerTab = ({TopCreator}) => {
                         <RiUserFollowFill className="mr-[0.2rem]"/> Popular
                     </button>
                     <button className="p-[1rem] bg-icons-color text-main-bg border-[1px] border-solid border-icons-color rounded-[4rem] cursor-pointer transition-all ease-in hover:bg-[transparent] hover:text-icons-color flex" onClick={() => openFollower()}>
-                        <RiUserFollowFill className="mr-[0.2rem]"/> Following
+                        <RiUserFollowFill className="mr-[0.2rem]"/> Follower
                     </button>
                     <button className="p-[1rem] bg-icons-color text-main-bg border-[1px] border-solid border-icons-color rounded-[4rem] cursor-pointer transition-all ease-in hover:bg-[transparent] hover:text-icons-color flex" onClick={() => openNews()}>
                         <RiAwardLine className="mr-[0.2rem]"/> NoteWorthy
@@ -158,8 +100,8 @@ export const FollowerTab = ({TopCreator}) => {
 
       {following && (
         <div className="w-[80%] my-0 mx-auto grid grid-cols-4 gap-[2rem]">
-          {FollowingArray.map((el, i) => (
-            <FollowerTabCard key={i + 1} i={i} el={el} />
+          {topFollowers.map((el, i) => (
+            <FollowerTabCardTwo key={i + 1} i={i} el={el} />
           ))}
         </div>
       )}

@@ -11,6 +11,7 @@ export const NFTDetailsImg = ({ nft }) => {
   const [details, setDetails] = useState(true);
   const [like, setLike] = useState("");
   const [likeCount, setLikeCount] = useState(0);
+  const [isLiking, setIsLiking] = useState(false);
 
   useEffect(() => {
     if (nft) {
@@ -28,18 +29,22 @@ export const NFTDetailsImg = ({ nft }) => {
   };
 
   const handleLikeToggle = async (tokenId) => {
+    if (isLiking) return;
+    setIsLiking(true);
     try {
       if (like == "true") {
         await unLikeNft(tokenId);
         setLike("false");
-        setLikeCount(likeCount - 1);
+        setLikeCount(prevCount => Math.max(prevCount - 1, 0));
       } else {
         await likeNft(tokenId);
         setLike("true");
-        setLikeCount(likeCount + 1);
+        setLikeCount(prevCount => prevCount + 1);
       }
     } catch (error) {
       console.error('Error liking/unliking NFT:', error);
+    } finally {
+      setIsLiking(false);
     }
   };
 

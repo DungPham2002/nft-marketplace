@@ -3,37 +3,32 @@ import Image from "next/image";
 import { MdVerified } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import images from "@/images";
-import { getUserByAddress } from "@/api/user.api";
 import { getFollowUser, followUser, unfollowUser } from "@/api/follow.api";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import Link from "next/link";
 
-export const FollowerTabCard = ({ i, el }) => {
+export const FollowerTabCardTwo = ({ i, el }) => {
   const [following, setFollowing] = useState(false);
-  const [userAvatar, setUserAvatar] = useState("");
   const { userProfile } = useContext(NFTMarketplaceContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await getUserByAddress(el.seller);
-      setUserAvatar(user?.user?.avatar);
-
       if (userProfile) {
-        const followStatus = await getFollowUser(userProfile?.id, el.seller);
+        const followStatus = await getFollowUser(userProfile?.id, el.address);
         setFollowing(followStatus?.isFollowed);
       }
     };
 
     fetchData();
-  }, [el.seller]);
+  }, [el.address]);
 
   const followMe = async () => {
     try {
       if (following) {
-        await unfollowUser(el.seller);
+        await unfollowUser(el.address);
         setFollowing(false);
       } else {
-        await followUser(el.seller);
+        await followUser(el.address);
         setFollowing(true);
       }
     } catch (error) {
@@ -66,33 +61,32 @@ export const FollowerTabCard = ({ i, el }) => {
             alt="profile picture"
             width={50}
             height={50}
-            src={userAvatar || images.user2}
+            src={el.avatar || images.user2}
           />
         </div>
 
-        <div className="col-start-1 col-end-[-1] flex items-center justify-between mt-[-1rem] px-[1rem] pb-[1rem]">
+        <div className="mx-auto items-center mt-[-1rem] px-[6rem] pb-[1rem]">
           <div className="items-center">
             <h4 className="text-[1rem] font-bold flex">
-              {el.seller.slice(0, 9)}
+              {el.address.slice(0, 9)}
               {""}{" "}
               <span className="ml-[0.2rem] my-auto">
                 <MdVerified />
               </span>
             </h4>
-            <p>{el.total || 0} ETH</p>
           </div>
 
-          <div className="Style.FollowerTabCard_box_info_following">
+          <div className="!ml-[-2.5rem]">
             {following ? (
               <a
-                className="rounded-[2rem] bg-shadow-dark py-[0.7rem] px-[1.5rem] border-[1px] border-solid border-shadow-dark transition-all ease-in hover:bg-[transparent] flex"
+                className="rounded-[2rem] bg-shadow-dark py-[0.7rem] px-[4rem] border-[1px] border-solid border-shadow-dark transition-all ease-in hover:bg-[transparent] flex"
                 onClick={followMe}
               >
                 Following
               </a>
             ) : (
               <a
-                className="rounded-[2rem] bg-shadow-dark py-[0.7rem] px-[1.5rem] border-[1px] border-solid border-shadow-dark transition-all ease-in hover:bg-[transparent] flex"
+                className="rounded-[2rem] bg-shadow-dark py-[0.7rem] px-[4rem] border-[1px] border-solid border-shadow-dark transition-all ease-in hover:bg-[transparent] flex"
                 onClick={followMe}
               >
                 Follow{""}{" "}
