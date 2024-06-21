@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { NFTCardTwo } from "../../collectionPage/collectionIndex";
-import { FollowerTabCard } from "@/components/FollowerTab/FollowerTabCard/FollowerTabCard";
-import images from "@/images";
 import { FollowerTabCardTwo } from "../FollowerTabCardTwo/FolloweTabCardTwo";
 
 export const AuthorNFTCardBox = ({

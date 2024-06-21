@@ -105,7 +105,7 @@ export const NFTDescription = ({nft}) => {
     };
 
     useEffect(() => {
-      if (nft.seller != "") {
+      if (nft.seller != "" && nft.seller) {
         getUserByAddress(nft.seller).then((item) => {
           setAuthorProfile(item)
         })

@@ -9,7 +9,7 @@ import { Button } from "@/components/componentsindex";
 import { DropZone } from "./uploadNFTIndex";
 import Router, { useRouter } from "next/router";
 import { getAllCollection } from "@/api/collection.api";
-import { createNft } from "@/api/nft.api";
+
 
 
 
@@ -35,16 +35,9 @@ export const UploadNFT = ({ uploadToPinata, createNFT }) => {
     }, []);
 
     const handleCreateNFT = async() => {
-      const nftCreated = await createNFT(
-        name,
-        price,
-        image,
-        description,
-        router
+      await createNFT(
+        image, name, description, website, price, fileSize, royalties, collectionId, router
       );
-      if (nftCreated) {
-       createNft(image, name, description, website, +price, fileSize, +royalties, collectionId);
-      }
     }
   
     return (

@@ -69,6 +69,7 @@ export const NFTCardTwo = ({ NFTData }) => {
         {NFTData?.map((el, i) => (
             <Link href={{ pathname:"/NFT-details", query:  { 
                 ...el, 
+                owner: el.owner?.address,
                 endTime: el.endTime?.toString(), 
                 likeCount: likes[el.tokenId]?.likeCount || 0,
                 isLiked: likes[el.tokenId]?.isLiked || false, } }} key={i + 1}>

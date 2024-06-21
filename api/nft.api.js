@@ -9,7 +9,8 @@ export const createNft = async (
   price,
   fileSize,
   royalties,
-  collectionId
+  collectionId,
+  url
 ) => {
   const token = localStorage.getItem("accessToken");
   const response = await axios.post(
@@ -23,6 +24,7 @@ export const createNft = async (
       size: fileSize,
       royalties,
       collectionId,
+      tokenURI: url
     },
     {
       headers: {

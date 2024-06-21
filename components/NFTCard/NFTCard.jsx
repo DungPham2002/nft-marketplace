@@ -107,7 +107,7 @@ export const NFTCard = ({ NFTData }) => {
             <div className=" px-[4rem] bg-shadow-light text-center rounded-bl-[1rem] mr-[-2rem] skew-x-45 transform">
               <div className="bg-shadow-light -skew-x-45">
                 <small>Remaining time</small>
-                <p className="text-[1.2rem] font-semibold">3h : 15m : 20s</p>
+                <p className="text-[1.2rem] font-semibold">0h : 0m : 0s</p>
               </div>
             </div>
           </div>

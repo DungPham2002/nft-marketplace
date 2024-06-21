@@ -11,7 +11,7 @@ import axios from "axios";
 import Web3Modal from "web3modal";
 import { logIn } from "@/api/auth.api";
 import { getUserProfile } from "@/api/user.api";
-import { buyNft, reSellNft } from "@/api/nft.api";
+import { buyNft, reSellNft, createNft } from "@/api/nft.api";
 import { listOnAuction } from "@/api/auction.api";
 import { endBid, makeOffer } from "@/api/auction.api";
 
@@ -159,7 +159,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
     }
   };
 
-  const createNFT = async (name, price, image, description, router) => {
+  const createNFT = async(image, name, description, website, price, fileSize, royalties, collectionId, router) => {
     if (!name || !description || !price || !image)
       return console.log("Data is missing");
     const data = JSON.stringify({ name, description, image });
@@ -175,8 +175,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
         },
       });
 
-      const url = `https://beige-necessary-lobster-645.mypinata.cloud/ipfs/${response.data.IpfsHash}`;
+      const url = `https://beige-necessary-lobster-645.mypinata.cloud/ipfs/${response.data.IpfsHash}`;  
       const createSaleNft = await createSale(url, price);
+      await createNft(image, name, description, website, +price, fileSize, +royalties, collectionId, url)
       router.push("/search");
       if (createSaleNft) {
         return true;

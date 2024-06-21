@@ -18,6 +18,7 @@ export default function NFTDetails() {
     endTime: "",
     likeCount: "",
     isLiked: "",
+    tokenURI: "",
   });
 
   const router = useRouter();

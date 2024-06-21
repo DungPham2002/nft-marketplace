@@ -4,7 +4,7 @@ import { BASE_API_URL } from "@/datas";
 
 export const listOnAuction = async(id, minBid, duration) =>{
     const token = localStorage.getItem("accessToken");
-    const response = await axios.post(`${BASE_API_URL}/nfts/create-auction/${id}`,
+    const response = await axios.post(`${BASE_API_URL}/auction/create-auction/${id}`,
       {price: minBid, duration},
       {
         headers: {
@@ -18,7 +18,7 @@ export const listOnAuction = async(id, minBid, duration) =>{
 
 export const makeOffer = async(tokenId, price) => {
     const token = localStorage.getItem("accessToken");
-    const response = await axios.post(`${BASE_API_URL}/nfts/bid-auction/${tokenId}`,
+    const response = await axios.post(`${BASE_API_URL}/auction/bid-auction/${tokenId}`,
         {price},
         {
           headers: {
@@ -31,6 +31,6 @@ export const makeOffer = async(tokenId, price) => {
 }
 
 export const endBid = async(tokenId) => { 
-    const response = await axios.post(`${BASE_API_URL}/nfts/end-auction/${tokenId}`, {});
+    const response = await axios.post(`${BASE_API_URL}/auction/end-auction/${tokenId}`, {});
     return response.data;
 }

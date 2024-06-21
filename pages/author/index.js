@@ -38,14 +38,18 @@ export default function Author() {
       if (addressKey) {
         setAddress(addressKey);
         handleSearchAddress(addressKey);
+      } else {
+        if (currentAccount) {
+          fetchUserData(currentAccount);
+        }
       }
-    }, [router.query]);
+    }, [router.query, currentAccount]);
 
     useEffect(() => {
-      if (currentAccount) {
-        fetchUserData(currentAccount);
+      if (userByAddress && userByAddress.createdNft) {
+        updateMyNFTs(userByAddress.user.address);
       }
-    }, [currentAccount]);
+    }, [userByAddress, auctionList]);
 
     const fetchUserData = async (address) => {
       const user = await getUserByAddress(address);
@@ -56,18 +60,7 @@ export default function Author() {
       setAuctionList(userAuctions);
 
       const listedNfts = await getListSoldNft(address);
-      console.log(listedNfts)
-      const filteredListedNFTs = listedNfts?.filter((nft) => {
-        return !auctionList.some((auction) => auction.tokenId === nft.tokenId);
-      });
-      setNfts(filteredListedNFTs);
-      console.log(nfts)
-
-      const fetchedMyNFTs = await getListOwnerNft(address);
-      const filteredMyNFTs = fetchedMyNFTs?.filter((nft) => {
-        return !auctionList.some((auction) => auction.tokenId === nft.tokenId);
-      });
-      setMyNFTs(filteredMyNFTs);
+      setNfts(listedNfts);
 
       const listLikedNfts = await getListNftLiked(address);
       setLikedList(listLikedNfts)
@@ -77,6 +70,14 @@ export default function Author() {
 
       const listFollowing = await getListFollowing(address);
       setFollowingList(listFollowing);
+    };
+
+    const updateMyNFTs = async(address) => {
+      const fetchedMyNFTs = await getListOwnerNft(address);
+      const filteredMyNFTs = fetchedMyNFTs?.filter((nft) => {
+        return !auctionList.some((auction) => auction.tokenId === nft.tokenId);
+      });
+      setMyNFTs(filteredMyNFTs);
     };
 
     const handleSearchAddress = async (address) => {
