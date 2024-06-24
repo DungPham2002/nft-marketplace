@@ -121,3 +121,9 @@ export const getListOwnerNft = async (address) => {
   const response = await axios.get(`${BASE_API_URL}/nfts/own-list/${address}`);
   return response.data;
 };
+
+
+export const getTopNft = async () => {
+  const response = await axios.get(`${BASE_API_URL}/nfts/top-nft`);
+  return response.data;
+};

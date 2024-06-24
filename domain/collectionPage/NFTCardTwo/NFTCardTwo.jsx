@@ -114,7 +114,7 @@ export const NFTCardTwo = ({ NFTData }) => {
                 <div className="flex justify-between items-end p-[1rem]">
                     <div className="{Style.NFTCardTwo_box_price_box}">
                     <small className="mx-[0.5rem] rounded-[0.3rem] p-[1rem] text-main-bg bg-icons-color">Current Bid</small>
-                    <p className="rounded-[0.3rem] text-[1.1rem] pt-[1rem] px-[1.5rem] pb-[0.5rem] border-[1px] border-solid border-icons-color">{el.price ? (el.price) : (el.minBid) ? (el.minBid.slice(0,5)) : 0} ETH</p>
+                    <p className="rounded-[0.3rem] text-[1.1rem] pt-[1rem] px-[1.5rem] pb-[0.5rem] border-[1px] border-solid border-icons-color">{el.highestBid ? (el.highestBid) : (el.minBid) ? (el.minBid.slice(0,5)) : 0} ETH</p>
                     </div>
                     <p className="flex items-center gap-[0.5rem] text-[1.1rem]">
                     <MdTimer /> <CountDownTimer targetDate={el.endTime}/>

@@ -159,7 +159,17 @@ export const NFTMarketplaceProvider = ({ children }) => {
     }
   };
 
-  const createNFT = async(image, name, description, website, price, fileSize, royalties, collectionId, router) => {
+  const createNFT = async (
+    image,
+    name,
+    description,
+    website,
+    price,
+    fileSize,
+    royalties,
+    collectionId,
+    router
+  ) => {
     if (!name || !description || !price || !image)
       return console.log("Data is missing");
     const data = JSON.stringify({ name, description, image });
@@ -175,9 +185,19 @@ export const NFTMarketplaceProvider = ({ children }) => {
         },
       });
 
-      const url = `https://beige-necessary-lobster-645.mypinata.cloud/ipfs/${response.data.IpfsHash}`;  
+      const url = `https://beige-necessary-lobster-645.mypinata.cloud/ipfs/${response.data.IpfsHash}`;
       const createSaleNft = await createSale(url, price);
-      await createNft(image, name, description, website, +price, fileSize, +royalties, collectionId, url)
+      createNft(
+        image,
+        name,
+        description,
+        website,
+        +price,
+        fileSize,
+        +royalties,
+        collectionId,
+        url
+      );
       router.push("/search");
       if (createSaleNft) {
         return true;
@@ -215,7 +235,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
   const fetchNFTs = async () => {
     try {
       if (currentAccount) {
-        const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_SEPOLIA_API_KEY);
+        const provider = new ethers.providers.JsonRpcProvider(
+          process.env.NEXT_PUBLIC_SEPOLIA_API_KEY
+        );
         const contract = fetchContract(provider);
         const data = await contract.fetchMarketItems();
         const items = await Promise.all(
@@ -252,7 +274,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   useEffect(() => {
     if (currentAccount) {
-    fetchNFTs();
+      fetchNFTs();
     }
   }, []);
 
@@ -294,7 +316,6 @@ export const NFTMarketplaceProvider = ({ children }) => {
   //     console.log("Error when listing NFTs", error);
   //   }
   // };
-
 
   const buyNFT = async (nft) => {
     try {
@@ -444,7 +465,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           duration
         );
         await transaction.wait();
-        listOnAuction(id, minBid, duration );
+        await listOnAuction(id, minBid, duration);
         router.push("/search");
       }
     } catch (error) {

@@ -1,87 +1,30 @@
 import images from "@/images";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useContext } from "react";
 import { AiFillFire, AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { MdVerified, MdTimer } from "react-icons/md";
 import { TbArrowBigLeftLines, TbArrowBigRightLines } from "react-icons/tb";
 import Image from "next/image";
 import { Button } from "../componentsindex";
+import { CountDownTimer } from "@/domain/NFTDetailsPage/NFTDescription/CountDownTimer/CountDownTimer";
+import { useRouter } from "next/router";
+import dayjs from "dayjs";
+import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
+import { getLikeNft, likeNft, unLikeNft } from "@/api/nft.api";
 
-export const BigNFTSlider = () => {
+export const BigNFTSlider = ({ NFTData }) => {  
+  const { userProfile } = useContext(NFTMarketplaceContext);
+
   const [idNumber, setIdNumber] = useState(0);
-
-  const sliderData = [
-    {
-      title: "Hello NFT",
-      id: 1,
-      name: "Daulat Hussain",
-      collection: "GYm",
-      price: "00664 ETH",
-      like: 243,
-      image: images.user2,
-      nftImage: images.nft_image_1,
-      time: {
-        days: 21,
-        hours: 40,
-        minutes: 81,
-        seconds: 15,
-      },
-    },
-    {
-      title: "Buddy NFT",
-      id: 2,
-      name: "Shoaib Hussain",
-      collection: "Home",
-      price: "0000004 ETH",
-      like: 243,
-      image: images.user2,
-      nftImage: images.nft_image_2,
-      time: {
-        days: 77,
-        hours: 11,
-        minutes: 21,
-        seconds: 45,
-      },
-    },
-    {
-      title: "Gym NFT",
-      id: 3,
-      name: "Raayan Hussain",
-      collection: "GYm",
-      price: "0000064 ETH",
-      like: 243,
-      image: images.user3,
-      nftImage: images.nft_image_3,
-      time: {
-        days: 37,
-        hours: 20,
-        minutes: 11,
-        seconds: 55,
-      },
-    },
-    {
-      title: "Home NFT",
-      id: 4,
-      name: "Raayan Hussain",
-      collection: "GYm",
-      price: "4664 ETH",
-      like: 243,
-      image: images.user4,
-      nftImage: images.nft_image_1,
-      time: {
-        days: 87,
-        hours: 29,
-        minutes: 10,
-        seconds: 15,
-      },
-    },
-  ];
+  const [likes, setLikes] = useState({});
+  const [isLiking, setIsLiking] = useState(false);
+  const router = useRouter();
 
   //-------INC
   const inc = useCallback(() => {
-    if (idNumber + 1 < sliderData.length) {
+    if (idNumber + 1 < NFTData.length) {
       setIdNumber(idNumber + 1);
     }
-  }, [idNumber, sliderData.length]);
+  }, [idNumber, NFTData.length]);
 
   //-------DEC
   const dec = useCallback(() => {
@@ -90,16 +33,68 @@ export const BigNFTSlider = () => {
     }
   }, [idNumber]);
 
+  //==========Like
+  useEffect(() => {
+    if (userProfile) {
+      NFTData?.forEach(async (nft) => {
+        if (userProfile.id !== 0) {
+          const res = await getLikeNft(userProfile.id, nft.tokenId);
+          setLikes((prevLikes) => ({
+            ...prevLikes,
+            [nft.tokenId]: res,
+          }));
+        } else {
+          setLikes((prevLikes) => ({
+            ...prevLikes,
+            [nft.tokenId]: { likeCount: nft.likes || 0, isLiked: false },
+          }));
+        }
+      });
+    }
+  }, [userProfile, NFTData]);
+
+  const handleLikeToggle = async (tokenId) => {
+    if (isLiking) return;
+    setIsLiking(true);
+    try {
+      if (likes[tokenId]?.isLiked) {
+        await unLikeNft(tokenId);
+        setLikes((prevLikes) => ({
+          ...prevLikes,
+          [tokenId]: {
+            ...prevLikes[tokenId],
+            isLiked: false,
+            likeCount: prevLikes[tokenId].likeCount - 1,
+          },
+        }));
+      } else {
+        await likeNft(tokenId);
+        setLikes((prevLikes) => ({
+          ...prevLikes,
+          [tokenId]: {
+            ...prevLikes[tokenId],
+            isLiked: true,
+            likeCount: prevLikes[tokenId].likeCount + 1,
+          },
+        }));
+      }
+    } catch (error) {
+      console.error('Error liking/unliking NFT:', error);
+    } finally {
+      setIsLiking(false);
+    }
+  };
+
   return (
     <div className="my-[8rem]">
       <div className="my-0 mx-auto w-[80%] grid grid-cols-12 items-center">
         <div className="col-start-1 col-end-7 row-start-1 row-end-[-1] bg-main-bg shadow-shadow-1 rounded-[1rem] p-[2rem] z-[1111] h-[90vh]">
-          <h2 className="font-bold text-[3rem]">{sliderData[idNumber].title}</h2>
+          <h2 className="font-bold text-[3rem]">{NFTData[idNumber]?.name} {""} #{NFTData[idNumber]?.tokenId}</h2>
           <div className="grid grid-cols-2 items-center">
             <div className="flex items-center gap-[1rem]">
               <Image
                 className="rounded-[50%] h-[50px] w-[50px]"
-                src={sliderData[idNumber].image}
+                src={NFTData[idNumber]?.sellerAvatar || images.user1}
                 alt="profile image"
                 width={50}
                 height={50}
@@ -107,7 +102,7 @@ export const BigNFTSlider = () => {
               <div className="">
                 <p className="">Creator</p>
                 <h4 className="flex font-bold">
-                  {sliderData[idNumber].name}{" "}
+                  {NFTData[idNumber]?.sellerName || "UnName"}{" "}
                   <span>
                     <MdVerified />
                   </span>
@@ -116,15 +111,10 @@ export const BigNFTSlider = () => {
             </div>
 
             <div className="flex items-center gap-[1rem]">
-              <AiFillFire
-                className="text-[4rem]"
-              />
-
-              <div
-                className=""
-              >
+              <AiFillFire className="text-[4rem]" />
+              <div className="">
                 <p>Collection</p>
-                <h4 className="font-bold">{sliderData[idNumber].collection}</h4>
+                <h4 className="font-bold">{NFTData[idNumber]?.collectionName}</h4>
               </div>
             </div>
           </div>
@@ -133,50 +123,41 @@ export const BigNFTSlider = () => {
             <div className="my-[2rem] py-0 px-[4rem] rounded-[0.5rem] border-[3px] border-solid border-shadow-dark">
               <small className="py-[1rem] px-[2rem] bg-shadow-dark font-semibold rounded-[0.5rem]">Current Bid</small>
               <p className="my-[1rem]">
-                {sliderData[idNumber].price} <span></span>
+                {(NFTData[idNumber]?.highestBid > NFTData[idNumber]?.minBid) ? (NFTData[idNumber]?.highestBid) : NFTData[idNumber]?.minBid} ETH<span></span>
               </p>
             </div>
 
             <p className="flex items-center gap-[1rem]">
-              <MdTimer
-                className="text-[2rem]"
-              />
+              <MdTimer className="text-[2rem]" />
               <span>Auction ending in</span>
             </p>
-
-            <div className="flex items-center gap-[3rem] text-center pt-[1rem] px-0 pb-[3rem] border-b-[1px] border-b-solid border-b-shadow-dark">
-              <div
-                className="{Style.bigNFTSlider_box_left_bidding_box_timer_item}"
-              >
-                <p className="text-[2rem] font-black ">{sliderData[idNumber].time.days}</p>
-                <span>Days</span>
-              </div>
-
-              <div
-                className="{Style.bigNFTSlider_box_left_bidding_box_timer_item}"
-              >
-                <p className="text-[2rem] font-black ">{sliderData[idNumber].time.hours}</p>
-                <span>Hours</span>
-              </div>
-
-              <div
-                className="{Style.bigNFTSlider_box_left_bidding_box_timer_item}"
-              >
-                <p className="text-[2rem] font-black ">{sliderData[idNumber].time.minutes}</p>
-                <span>mins</span>
-              </div>
-
-              <div
-                className="{Style.bigNFTSlider_box_left_bidding_box_timer_item}"
-              >
-                <p className="text-[2rem] font-black ">{sliderData[idNumber].time.seconds}</p>
-                <span>secs</span>
-              </div>
+            <div className="text-center pt-[1rem] px-0 pb-[1rem] border-b-[1px] border-b-solid border-b-shadow-dark">
+              <CountDownTimer targetDate={dayjs(NFTData[idNumber]?.endTime).toDate()} />
             </div>
-
             <div className="flex items-center justify-center gap-[4rem] py-[2rem]">
-              <Button btnName="Place" handleClick={() => {}} />
-              <Button btnName="View" handleClick={() => {}} />
+              <Button btnName="Place" handleClick={() => router.push(`/bidNFT?id=${NFTData[idNumber]?.tokenId}&tokenURI=${NFTData[idNumber]?.tokenURI}`)} />
+              <Button 
+                btnName="View" 
+                handleClick={() => router.push({ 
+                  pathname: "/NFT-details", 
+                  query: { 
+                    tokenId: NFTData[idNumber]?.tokenId,
+                    tokenURI: NFTData[idNumber]?.tokenURI,
+                    name: NFTData[idNumber]?.name,
+                    description: NFTData[idNumber]?.description,
+                    image: NFTData[idNumber]?.image,
+                    collectionId: NFTData[idNumber]?.collectionId,
+                    website: NFTData[idNumber]?.website,
+                    royalties: NFTData[idNumber]?.royalties,
+                    seller: NFTData[idNumber]?.seller,
+                    minBid: NFTData[idNumber]?.minBid,
+                    highestBid: NFTData[idNumber]?.highestBid,
+                    likeCount: likes[NFTData[idNumber]?.tokenId]?.likeCount || 0,
+                    isLiked: likes[NFTData[idNumber]?.tokenId]?.isLiked || false,
+                    endTime: dayjs(NFTData[idNumber]?.endTime).toDate().toString(),
+                  }
+                })}
+              />
             </div>
           </div>
 
@@ -195,14 +176,20 @@ export const BigNFTSlider = () => {
         <div className="col-start-6 col-end-[-1] row-start-1 row-end-[-1] p-[1rem] bg-main-bg rounded-[2.5rem] shadow-shadow-1">
           <div className="relative">
             <Image
-              src={sliderData[idNumber].nftImage}
+              src={NFTData[idNumber]?.image}
               alt="NFT IMAGE"
+              width={680}
+              height={680}
               className="rounded-[2rem] h-[680px] w-[680px]"
             />
 
-            <div className="absolute top-[3rem] right-[3rem] flex items-center gap-[1rem] text-[1.2rem] bg-icons-color text-shadow-dark py-[0.5rem] px-[1rem] rounded-[5rem]">
-              <AiFillHeart />
-              <span>{sliderData[idNumber].like}</span>
+            <div onClick={(e) => {e.preventDefault(); handleLikeToggle(NFTData[idNumber].tokenId)}} className="absolute top-[3rem] right-[3rem] flex items-center gap-[1rem] text-[1.2rem] bg-icons-color text-shadow-dark py-[0.5rem] px-[1rem] rounded-[5rem]">
+              {likes[NFTData[idNumber]?.tokenId]?.isLiked ? (
+                <AiFillHeart className="text-[red]" />
+              ) : (
+                <AiOutlineHeart />
+              )}
+              {""} {likes[NFTData[idNumber]?.tokenId]?.likeCount || 0}
             </div>
           </div>
         </div>

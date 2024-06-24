@@ -34,3 +34,8 @@ export const endBid = async(tokenId) => {
     const response = await axios.post(`${BASE_API_URL}/auction/end-auction/${tokenId}`, {});
     return response.data;
 }
+
+export const getTopAuction = async() => {
+  const response = await axios.get(`${BASE_API_URL}/auction/top-auction`, {});
+  return response.data;
+}
