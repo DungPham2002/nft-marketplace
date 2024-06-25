@@ -190,7 +190,7 @@ export const NFTDescription = ({nft}) => {
   
               <div className="flex items-center gap-[1rem] border-l-[1px] border-solid border-icons-color pl-[2rem]">
                 <Image
-                  src={images.creatorbackground1}
+                  src={nft?.collectionImage}
                   alt="profile"
                   width={40}
                   height={40}
@@ -200,7 +200,7 @@ export const NFTDescription = ({nft}) => {
                 <div className="{Style.NFTDescription_box_profile_box_right_info}">
                   <small className="font-medium text-[1rem]">Collection</small> <br />
                   <span className="font-extrabold flex items-center">
-                    HIHIHI <MdVerified className="ml-[0.2rem]"/>
+                    {nft?.collectionName} <MdVerified className="ml-[0.2rem]"/>
                   </span>
                 </div>
               </div>

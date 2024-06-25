@@ -39,3 +39,13 @@ export const getTopAuction = async() => {
   const response = await axios.get(`${BASE_API_URL}/auction/top-auction`, {});
   return response.data;
 }
+
+export const getFilteredAuction = async({collectionId, filter}) => {
+  const response = await axios.get(`${BASE_API_URL}/auction/filter-auction`, {
+    params: {
+      collectionId,
+      filter
+    }, 
+  });
+  return response.data;
+}

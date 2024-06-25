@@ -64,14 +64,17 @@ export const NFTCard = ({ NFTData }) => {
   };
 
   return (
-    <div className="w-[80%] my-0 mx-auto grid grid-cols-3 gap-[3rem] mb-[10rem]">
+    <div className="w-[80%] my-0 mx-auto mt-[5rem] grid grid-cols-3 gap-[3rem] mb-[10rem]">
       {NFTData?.map((el, i) => (
         <Link
           href={{ pathname: "/NFT-details", query: { 
             ...el, 
             endTime: el.endTime?.toString(), 
             likeCount: likes[el.tokenId]?.likeCount || 0,
-            isLiked: likes[el.tokenId]?.isLiked || false, } 
+            isLiked: likes[el.tokenId]?.isLiked || false,
+            collectionName: el.collectionName,
+            collectionImage: el.collectionImage
+          } 
           }}
           key={i + 1}
           className="p-[1rem] bg-shadow-light rounded-[1rem] grid grid-cols-4 grid-rows-4 cursor-pointer transition-all ease-in hover:shadow-shadow-1 group"

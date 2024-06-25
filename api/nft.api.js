@@ -127,3 +127,13 @@ export const getTopNft = async () => {
   const response = await axios.get(`${BASE_API_URL}/nfts/top-nft`);
   return response.data;
 };
+
+export const getFilteredNft = async({collectionId, filter}) => {
+  const response = await axios.get(`${BASE_API_URL}/nfts/filter-nft`, {
+    params: {
+      collectionId,
+      filter
+    }, 
+  });
+  return response.data;
+}

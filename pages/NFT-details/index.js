@@ -7,7 +7,6 @@ import dayjs from "dayjs";
 
 
 export default function NFTDetails() {
-  const { currentAccount } = useContext(NFTMarketplaceContext);
   const [nft, setNft] = useState({
     name: "",
     image: "",
@@ -19,12 +18,14 @@ export default function NFTDetails() {
     likeCount: "",
     isLiked: "",
     tokenURI: "",
+    collectionName: "",
+    collectionImage: ""
   });
 
   const router = useRouter();
   useEffect(() => {
     if (!router.isReady) return;
-    const { name, image, description, tokenId, owner, price, seller, minBid, endTime, highestBid, tokenURI, likeCount, isLiked} = router.query;
+    const { name, image, description, tokenId, owner, price, seller, minBid, endTime, highestBid, tokenURI, likeCount, isLiked, collectionName, collectionImage} = router.query;
     const formattedEndTime = dayjs(endTime).toDate();
 
     setNft({
@@ -41,6 +42,8 @@ export default function NFTDetails() {
       endTime: formattedEndTime,
       likeCount,
       isLiked,
+      collectionName,
+      collectionImage
     });
   }, [router.isReady, router.query]);
 

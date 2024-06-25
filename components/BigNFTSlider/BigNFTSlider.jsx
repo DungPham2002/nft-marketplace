@@ -155,6 +155,8 @@ export const BigNFTSlider = ({ NFTData }) => {
                     likeCount: likes[NFTData[idNumber]?.tokenId]?.likeCount || 0,
                     isLiked: likes[NFTData[idNumber]?.tokenId]?.isLiked || false,
                     endTime: dayjs(NFTData[idNumber]?.endTime).toDate().toString(),
+                    collectionName: NFTData[idNumber]?.collectionName,
+                    collectionImage: NFTData[idNumber]?.collectionImage,
                   }
                 })}
               />

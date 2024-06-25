@@ -58,7 +58,7 @@ export default function Home() {
         heading="Featured NFTs"
         paragraph="Discover the most outstanding NFTs in all topics of life."
       />
-      <Filter />
+      {/* <Filter /> */}
       <NFTCard NFTData={nfts}/>
       <Title
         heading="Browse by category"
