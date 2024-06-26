@@ -70,7 +70,8 @@ export const NFTCardTwo = ({ NFTData }) => {
         {NFTData?.map((el, i) => (
             <Link href={{ pathname:"/NFT-details", query:  { 
                 ...el, 
-                owner: el.owner?.address,
+                isSelling: el.isSelling,
+                seller: el.owner?.address,
                 endTime: el.endTime?.toString(), 
                 likeCount: likes[el.tokenId]?.likeCount || 0,
                 isLiked: likes[el.tokenId]?.isLiked || false,
@@ -118,7 +119,7 @@ export const NFTCardTwo = ({ NFTData }) => {
                 <div className="flex justify-between items-end p-[1rem]">
                     <div className="{Style.NFTCardTwo_box_price_box}">
                     <small className="mx-[0.5rem] rounded-[0.3rem] p-[1rem] text-main-bg bg-icons-color">Current Bid</small>
-                    <p className="rounded-[0.3rem] text-[1.1rem] pt-[1rem] px-[1.5rem] pb-[0.5rem] border-[1px] border-solid border-icons-color">{el.highestBid >= el.minBid ? (el.highestBid) : (el.minBid) ? (el.minBid.slice(0,5)) : el.price} ETH</p>
+                    <p className="rounded-[0.3rem] text-[1.1rem] pt-[1rem] px-[1.5rem] pb-[0.5rem] border-[1px] border-solid border-icons-color">{+el.highestBid > +el.minBid ? (el.highestBid) : (el.minBid) ? (el.minBid.slice(0,5)) : el.price} ETH</p>
                     </div>
                     <p className="flex items-center gap-[0.5rem] text-[1.1rem]">
                     <MdTimer /> <CountDownTimer targetDate={dayjs(el.endTime).toDate()}/>

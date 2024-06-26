@@ -137,3 +137,8 @@ export const getFilteredNft = async({collectionId, filter}) => {
   });
   return response.data;
 }
+
+export const getOwnerHistory = async(nftId) => {
+  const response = await axios.get(`${BASE_API_URL}/nfts/owner-history/${nftId}`);
+  return response.data;
+}

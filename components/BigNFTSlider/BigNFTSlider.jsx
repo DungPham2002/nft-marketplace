@@ -157,6 +157,7 @@ export const BigNFTSlider = ({ NFTData }) => {
                     endTime: dayjs(NFTData[idNumber]?.endTime).toDate().toString(),
                     collectionName: NFTData[idNumber]?.collectionName,
                     collectionImage: NFTData[idNumber]?.collectionImage,
+                    isActive: true,
                   }
                 })}
               />

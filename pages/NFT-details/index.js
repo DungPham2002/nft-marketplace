@@ -19,13 +19,15 @@ export default function NFTDetails() {
     isLiked: "",
     tokenURI: "",
     collectionName: "",
-    collectionImage: ""
+    collectionImage: "",
+    isSelling: "",
+    isActive: "",
   });
 
   const router = useRouter();
   useEffect(() => {
     if (!router.isReady) return;
-    const { name, image, description, tokenId, owner, price, seller, minBid, endTime, highestBid, tokenURI, likeCount, isLiked, collectionName, collectionImage} = router.query;
+    const { name, image, description, tokenId, owner, price, seller, minBid, endTime, highestBid, tokenURI, likeCount, isLiked, collectionName, collectionImage, isSelling, isActive} = router.query;
     const formattedEndTime = dayjs(endTime).toDate();
 
     setNft({
@@ -43,7 +45,9 @@ export default function NFTDetails() {
       likeCount,
       isLiked,
       collectionName,
-      collectionImage
+      collectionImage,
+      isSelling,
+      isActive
     });
   }, [router.isReady, router.query]);
 

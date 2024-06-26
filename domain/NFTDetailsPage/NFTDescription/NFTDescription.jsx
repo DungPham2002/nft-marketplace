@@ -7,7 +7,7 @@ import {
   MdOutlineDeleteSweep,
 } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
-import { FaWallet, FaPercentage } from "react-icons/fa";
+import { FaWallet } from "react-icons/fa";
 import {
   TiSocialFacebook,
   TiSocialLinkedin,
@@ -25,6 +25,8 @@ import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import { useRouter } from "next/router";
 import { CountDownTimer } from "./CountDownTimer/CountDownTimer";
 import { getUserByAddress } from "@/api/user.api";
+import { getOwnerHistory } from "@/api/nft.api";
+import { getBidderHistory } from "@/api/auction.api";
 
 
 
@@ -32,34 +34,25 @@ export const NFTDescription = ({nft}) => {
     const [social, setSocial] = useState(false);
     const [NFTMenu, setNFTMenu] = useState(false);
     const [history, setHistory] = useState(true);
-    const [provanance, setProvanance] = useState(false);
     const [owner, setOwner] = useState(false);
     const [authorProfile, setAuthorProfile] = useState("");
+    const [onwerHistory, setOwnerHistory] = useState([]);
+    const [bidderHistory, setBidderHistory] = useState([]);
 
     const { currentAccount, buyNFT } = useContext(NFTMarketplaceContext);
     const router = useRouter();
 
-    const historyArray = [
-      images.user1,
-      images.user2,
-      images.user3,
-      images.user4,
-      images.user5,
-    ];
-    const provananceArray = [
-      images.user6,
-      images.user7,
-      images.user8,
-      images.user9,
-      images.user10,
-    ];
-    const ownerArray = [
-      images.user1,
-      images.user8,
-      images.user2,
-      images.user6,
-      images.user5,
-    ];
+    useEffect(() => {
+        if (nft.tokenId) {
+          getOwnerHistory(nft.tokenId).then((item) => {
+            setOwnerHistory(item)
+          })
+
+          getBidderHistory(nft.tokenId).then((item) => {
+            setBidderHistory(item)
+          })
+        }
+    }, [nft.tokenId])
   
     const openSocial = () => {
       if (!social) {
@@ -84,20 +77,17 @@ export const NFTDescription = ({nft}) => {
   
       if (btnText == "Bid History") {
         setHistory(true);
-        setProvanance(false);
         setOwner(false);
-      } else if (btnText == "Provanance") {
+      } else if (btnText == "Owner History") {
         setHistory(false);
-        setProvanance(true);
-        setOwner(false);
+        setOwner(true);
       }
     };
   
-    const openOwmer = () => {
+    const openOwner = () => {
       if (!owner) {
         setOwner(true);
-        setHistory(false);
-        setProvanance(false);
+        setHistory(false);;
       } else {
         setOwner(false);
         setHistory(true);
@@ -225,11 +215,11 @@ export const NFTDescription = ({nft}) => {
               </div>
   
               <div className="flex mt-[2rem] gap-[4rem]">
-                {currentAccount == nft?.seller?.toLowerCase() ? (
+                {currentAccount == nft?.seller?.toLowerCase() && nft?.isSelling == "true" && nft?.isActive != "true" ? (
                   <p className="items-center flex">
                     You cannot buy your own NFT
                   </p>
-                ) : currentAccount == nft?.owner?.toLowerCase() ? (
+                ) : currentAccount == nft?.seller?.toLowerCase() && nft?.isActive != "true" ? (
                   <Button
                   icon={<FaWallet className="mr-[0.5rem]"/>}
                   btnName="List on Market"
@@ -237,15 +227,15 @@ export const NFTDescription = ({nft}) => {
 
                   classStyle="flex items-center"
                 />
-                ) : (
+                ) : nft?.isSelling == "true" && nft?.isActive != "true" ? (
                   <Button
                   icon={<FaWallet className="mr-[0.5rem]"/>}
                   btnName="Buy NFT"
                   handleClick={() => buyNFT(nft)}
                   classStyle="flex items-center"
                 />
-                )}
-                {currentAccount == nft?.owner?.toLowerCase() ? (
+                ) : (<div className="mr-[-3.5rem]"/>)}
+                {currentAccount == nft?.seller?.toLowerCase() && nft?.isActive != "true" && nft?.isSelling != "true" ? (
                   <Button
                   icon={<FaWallet className="mr-[0.5rem]"/>}
                   btnName="List on Auction"
@@ -253,7 +243,7 @@ export const NFTDescription = ({nft}) => {
 
                   classStyle="flex items-center"
                 />
-                ) : (
+                ) : nft?.isSelling == "true" ? ((<div/>)) : (
                   <Button
                   icon={<FaWallet className="mr-[0.5rem]"/>}
                   btnName="Make offer"
@@ -264,25 +254,19 @@ export const NFTDescription = ({nft}) => {
               </div>
   
               <div className="mt-[3rem] flex gap-[1rem]">
-                <button className="text-[1rem] py-[1rem] px-[2rem] border-0 bg-shadow-dark text-icons-color rounded-[2rem] cursor-pointer font-semibold" onClick={(e) => openTabs(e)}>Bid History</button>
-                <button className="text-[1rem] py-[1rem] px-[2rem] border-0 bg-shadow-dark text-icons-color rounded-[2rem] cursor-pointer font-semibold" onClick={(e) => openTabs(e)}>Provanance</button>
-                <button className="text-[1rem] py-[1rem] px-[2rem] border-0 bg-shadow-dark text-icons-color rounded-[2rem] cursor-pointer font-semibold" onClick={() => openOwmer()}>Owner</button>
+                <button className="text-[1rem] w-[50%] py-[1rem] px-[2rem] border-0 bg-shadow-dark text-icons-color rounded-[2rem] cursor-pointer font-semibold" onClick={(e) => openTabs(e)}>Bid History</button>
+                <button className="text-[1rem] w-[50%] py-[1rem] px-[2rem] border-0 bg-shadow-dark text-icons-color rounded-[2rem] cursor-pointer font-semibold" onClick={() => openOwner()}>Owner</button>
               </div>
   
               {history && (
                 <div className="mt-[2rem] p-[1rem]">
-                  <NFTTabs dataTab={historyArray} />
-                </div>
-              )}
-              {provanance && (
-                <div className="mt-[2rem] p-[1rem]">
-                  <NFTTabs dataTab={provananceArray} />
+                  <NFTTabs dataTab={bidderHistory} />
                 </div>
               )}
   
               {owner && (
                 <div className="mt-[2rem] p-[1rem]">
-                  <NFTTabs dataTab={ownerArray} icon={<MdVerified />} />
+                  <NFTTabs dataTab={onwerHistory} icon={<MdVerified />} />
                 </div>
               )}
             </div>

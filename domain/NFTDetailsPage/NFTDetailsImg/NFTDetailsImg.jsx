@@ -4,6 +4,7 @@ import { BsImages } from "react-icons/bs";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { likeNft, unLikeNft } from "@/api/nft.api";
+import { NFTMarketplaceAdrress } from "@/Context/constants";
 
 
 export const NFTDetailsImg = ({ nft }) => {
@@ -109,8 +110,8 @@ export const NFTDetailsImg = ({ nft }) => {
             <p className="text-[1rem] py-[1rem]">
               <small className="text-[1rem]">Contract Address</small>
               <br />
-              <span className="text-[1rem]">{nft.contractAddress}</span>
-              {nft.seller}
+              <span className="text-[1rem]">{NFTMarketplaceAdrress}</span>
+              {/* {nft.seller} */}
             </p>
             <p className="text-[1rem]">
               <small className="text-[1rem]">Token ID</small>

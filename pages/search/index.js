@@ -8,7 +8,6 @@ import { getFilteredNft } from "@/api/nft.api";
 import { getFilteredAuction } from "@/api/auction.api";
 
 export default function Search() {
-    const { fetchNFTs, fetchActiveAuctions } = useContext(NFTMarketplaceContext);
     const [nfts, setNfts] = useState([]);
     const [nftCoppy, setNftCoppy] = useState([]);
     const [auctionList, setAuctionList] = useState([]);
@@ -20,25 +19,34 @@ export default function Search() {
     const [activeCollection, setActiveCollection] = useState(0);
 
 
-    useEffect(() => {
-        getFilteredNft({
-            collectionId: activeCollection != 0 ? activeCollection : null,
-            filter: highest ? 'highest' : lowest ? 'lowest' : newest ? 'newest' : oldest ? 'oldest' : null,
-          }).then((item) => {
-            setNfts(item);
-            setNftCoppy(item);
-            })
-    }, [activeCollection, highest, lowest, newest, oldest]);
-
-    useEffect(() => {
-        getFilteredAuction({
-            collectionId: activeCollection != 0 ? activeCollection : null,
-            filter: highest ? 'highest' : lowest ? 'lowest' : newest ? 'newest' : oldest ? 'oldest' : null,
-          }).then((items) => {
-        setAuctionList(items);
-        setAuctionCoppy(items);
-        });
-    }, [activeCollection, highest, lowest, newest, oldest]);
+    const fetchNFTs = async () => {
+        const filter = highest ? 'highest' : lowest ? 'lowest' : newest ? 'newest' : oldest ? 'oldest' : null;
+        const collectionId = activeCollection !== 0 ? activeCollection : null;
+        try {
+          const nftItems = await getFilteredNft({ collectionId, filter });
+          setNfts(nftItems);
+          setNftCoppy(nftItems);
+        } catch (error) {
+          console.error('Error fetching NFTs:', error);
+        }
+      };
+    
+      const fetchAuctions = async () => {
+        const filter = highest ? 'highest' : lowest ? 'lowest' : newest ? 'newest' : oldest ? 'oldest' : null;
+        const collectionId = activeCollection !== 0 ? activeCollection : null;
+        try {
+          const auctionItems = await getFilteredAuction({ collectionId, filter });
+          setAuctionList(auctionItems);
+          setAuctionCoppy(auctionItems);
+        } catch (error) {
+          console.error('Error fetching Auctions:', error);
+        }
+      };
+    
+      useEffect(() => {
+        fetchNFTs();
+        fetchAuctions();
+      }, [activeCollection, highest, lowest, newest, oldest]);
 
     const onHandleSearch = (value) => {
         const filteredNFTS = nftCoppy.filter(({ name }) =>

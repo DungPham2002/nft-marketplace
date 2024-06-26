@@ -49,3 +49,8 @@ export const getFilteredAuction = async({collectionId, filter}) => {
   });
   return response.data;
 }
+
+export const getBidderHistory = async(nftId) => {
+  const response = await axios.get(`${BASE_API_URL}/auction/bidder-history/${nftId}`);
+  return response.data;
+}
