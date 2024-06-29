@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { io } from "socket.io-client";
 import { getNotify } from "@/api/notification.api";
 import { updateNotify } from "@/api/notification.api";
+import { SOCKET_URL } from "@/datas";
 
 export const NavBar = () => {
     const [discover, setDiscover] = useState(false);
@@ -46,7 +47,7 @@ export const NavBar = () => {
         console.error('No access token found');
         return;
       }
-      const socket = io('http://localhost:3300', {
+      const socket = io(`${SOCKET_URL}`, {
         cor: { origin: ['*'] },
         auth: {
           Authorization: `Bearer ${accessToken}`,
