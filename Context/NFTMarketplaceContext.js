@@ -187,19 +187,19 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
       const url = `https://beige-necessary-lobster-645.mypinata.cloud/ipfs/${response.data.IpfsHash}`;
       const createSaleNft = await createSale(url, price);
-      createNft(
-        image,
-        name,
-        description,
-        website,
-        +price,
-        fileSize,
-        +royalties,
-        collectionId,
-        url
-      );
-      router.push("/search");
       if (createSaleNft) {
+        createNft(
+          image,
+          name,
+          description,
+          website,
+          +price,
+          fileSize,
+          +royalties,
+          collectionId,
+          url
+        );
+        router.push("/search");
         return true;
       } else {
         return false;
@@ -465,7 +465,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           duration
         );
         await transaction.wait();
-        await listOnAuction(id, minBid, duration);
+        listOnAuction(id, minBid, duration);
         router.push("/search");
       }
     } catch (error) {
@@ -511,11 +511,13 @@ export const NFTMarketplaceProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(checkAndEndAuctions, 60000);
-    checkAndEndAuctions();
-    return () => {
-      clearInterval(interval);
-    };
+    if (currentAccount) {
+      const interval = setInterval(checkAndEndAuctions, 60000);
+      checkAndEndAuctions();
+      return () => {
+        clearInterval(interval);
+      };
+    }
   }, []);
 
   useEffect(() => {

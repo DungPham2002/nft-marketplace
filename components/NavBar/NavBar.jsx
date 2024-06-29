@@ -9,94 +9,112 @@ import { Notification } from "./Notification/Notification";
 import { Profile } from "./Profile/Profile";
 import { SideBar } from "./SideBar/SideBar";
 import Image from "next/image";
-import { CgMenuLeft, CgMenuRight } from "react-icons/cg";
+import { CgMenuRight } from "react-icons/cg";
 import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { getUserProfile } from "@/api/user.api";
+import { io } from "socket.io-client";
+import { getNotify } from "@/api/notification.api";
+import { updateNotify } from "@/api/notification.api";
 
 export const NavBar = () => {
-    //USESTATE COMPONNTS
     const [discover, setDiscover] = useState(false);
     const [help, setHelp] = useState(false);
     const [notification, setNotification] = useState(false);
     const [profile, setProfile] = useState(false);
     const [openSideBarMenu, setOpenSideBarMenu] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
     const router = useRouter();
+    const { currentAccount, userProfile } = useContext(NFTMarketplaceContext);
   
-    // const openMenu = (e) => {
-    //   const btnText = e.target.innerText;
-    //   if (btnText == "Discover") {
-    //     setDiscover(true);
-    //     setHelp(false);
-    //     setNotification(false);
-    //     setProfile(false);
-    //   } else if (btnText == "Help Center") {
-    //     setDiscover(false);
-    //     setHelp(true);
-    //     setNotification(false);
-    //     setProfile(false);
-    //   } else {
-    //     setDiscover(false);
-    //     setHelp(false);
-    //     setNotification(false);
-    //     setProfile(false);
-    //   }
-    // };
-
+    useEffect(() => {
+      const fetchNotifications = async () => {
+        try {
+          const notifyData = await getNotify();
+          setNotifications(notifyData);
+          const unreadCount = notifyData.filter(notification => !notification.isRead).length;
+          setUnreadCount(unreadCount);
+        } catch (error) {
+          console.error('Error fetching notifications:', error);
+        }
+      };
+  
+      fetchNotifications();
+  
+      const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('No access token found');
+        return;
+      }
+      const socket = io('http://localhost:3300', {
+        cor: { origin: ['*'] },
+        auth: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        transports: ['websocket'],
+      });
+  
+      socket.on('connect', () => {
+        console.log('Connected to WebSocket server');
+      });
+  
+      socket.on('disconnect', (reason) => {
+        console.log(`Disconnected: ${reason}`);
+      });
+  
+      socket.on('connect_error', (error) => {
+        console.error('Connection Error:', error);
+      });
+  
+      socket.on('notification', (data) => {
+        setNotifications((prevNotifications) => [...prevNotifications, data]);
+        setUnreadCount((prevCount) => prevCount + 1);
+      });
+  
+      return () => {
+        socket.disconnect();
+      };
+    }, []);
+  
     const openDiscover = () => {
-      if (!discover) {
-        setNotification(false);
-        setDiscover(true);
-        setHelp(false);
-        setProfile(false);
-      } else {
-        setDiscover(false);
-      }
-    };
-
-    const openHelp = () => {
-      if (!help) {
-        setNotification(false);
-        setDiscover(false);
-        setHelp(true);
-        setProfile(false);
-      } else {
-        setHelp(false);
-      }
+      setDiscover(!discover);
+      setHelp(false);
+      setNotification(false);
+      setProfile(false);
     };
   
-    const openNotification = () => {
-      if (!notification) {
-        setNotification(true);
-        setDiscover(false);
-        setHelp(false);
-        setProfile(false);
-      } else {
-        setNotification(false);
+    const openHelp = () => {
+      setHelp(!help);
+      setDiscover(false);
+      setNotification(false);
+      setProfile(false);
+    };
+  
+    const openNotification = async () => {
+      if (unreadCount > 0) {
+        try {
+          setNotifications(notifications.map(notification => ({ ...notification })));
+          setUnreadCount(0);
+        } catch (error) {
+          console.error('Error updating notifications:', error);
+        }
       }
+      setNotification(!notification);
+      setDiscover(false);
+      setHelp(false);
+      setProfile(false);
     };
   
     const openProfile = () => {
-      if (!profile) {
-        setProfile(true);
-        setHelp(false);
-        setDiscover(false);
-        setNotification(false);
-      } else {
-        setProfile(false);
-      }
+      setProfile(!profile);
+      setHelp(false);
+      setDiscover(false);
+      setNotification(false);
     };
   
     const openSideBar = () => {
-      if (!openSideBarMenu) {
-        setOpenSideBarMenu(true);
-      } else {
-        setOpenSideBarMenu(false);
-      }
+      setOpenSideBarMenu(!openSideBarMenu);
     };
-
-    const { currentAccount, userProfile } = useContext(NFTMarketplaceContext);
   
     return (
       <div className="w-full z-[11111] p-6 relative">
@@ -109,12 +127,12 @@ export const NavBar = () => {
                 width={100}
                 height={100}
                 className=""
-                onClick={() => router.push("/")}
+                onClick={() => router.push('/')}
               />
             </div>
             <div className="">
               <div className="w-3/5 h-[38px] border border-icons-color flex items-center px-2 rounded-full overflow-hidden max-[768px]:hidden">
-                <input type="text" placeholder="Search NFT" className="w-full border-none outline-none bg-[transparent] max-[768px]:hidden"/>
+                <input type="text" placeholder="Search NFT" className="w-full border-none outline-none bg-[transparent] max-[768px]:hidden" />
                 <BsSearch onClick={() => {}} className="cursor-pointer text-lg" />
               </div>
             </div>
@@ -145,23 +163,25 @@ export const NavBar = () => {
             {/* NOTIFICATION */}
             <div className="relative cursor-pointer">
               <MdNotifications
-                className="text-2xl"
+                className="text-2xl relative"
                 onClick={() => openNotification()}
               />
-              {notification && <Notification />}
+              {unreadCount > 0 && (
+                <span className="bg-[red] absolute top-0 right-0 h-[0.3rem] w-[0.3rem] bg-red-500 rounded-full outer-circle"></span>
+              )}
+              {notification && <Notification notifications={notifications} />}
             </div>
   
             {/* CREATE BUTTON SECTION */}
             <div className="relative cursor-pointer max-[768px]:hidden">
-              {currentAccount == "" ? (
-                <Button btnName="Connect" handleClick={() => router.push("connect-wallet")}/>
+              {currentAccount === '' ? (
+                <Button btnName="Connect" handleClick={() => router.push('connect-wallet')} />
               ) : (
-                <Button btnName="Create" handleClick={() => router.push("upload-NFT")} />
+                <Button btnName="Create" handleClick={() => router.push('upload-NFT')} />
               )}
             </div>
   
             {/* USER PROFILE */}
-  
             <div className="relative cursor-pointer">
               <div className="rounded-full">
                 <Image
@@ -170,15 +190,14 @@ export const NavBar = () => {
                   width={40}
                   height={40}
                   onClick={() => openProfile()}
-                  className="rounded-[50%] h-[40px] w-[40px]" />
+                  className="rounded-[50%] h-[40px] w-[40px]" 
+                />
   
                 {profile && <Profile currentUser={userProfile} />}
-
               </div>
             </div>
   
             {/* MENU BUTTON */}
-  
             <div className="hidden max-[768px]:block">
               <CgMenuRight
                 className="text-2.5xl cursor-pointer"
