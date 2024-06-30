@@ -1,5 +1,5 @@
 export const NFTMarketplaceAdrress =
-  "0xd4462B51594973Ae7044fc31Ce7c0fd2bD232e18";
+  "0xC7149539a9bE91c5ae3105ae4c78888cCAaccEB5";
 export const NFTMarketplaceABI = [
   {
     "inputs": [],
@@ -708,7 +708,7 @@ export const NFTMarketplaceABI = [
 ];
 
 
-export const TransferAddress = "0x8a7bb36E4704B29838E08cEA4da363A5c777Da2F";
+export const TransferAddress = "0x7D6BaD7DFb0d1DA8dC982bff1c8B47Feb6F9054A";
 export const TransferABI = [
   {
     "anonymous": false,
