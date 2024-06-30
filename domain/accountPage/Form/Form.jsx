@@ -25,9 +25,10 @@ export const Form = ({userProfile,image}) => {
         setAvatar(image);
     }, [image]);
     
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
     try {
-        await updateUserProfile(name, email, avatar, description, youtube, facebook, twitter, instagram);
+        updateUserProfile(name, email, avatar, description, youtube, facebook, twitter, instagram);
+        window.location.reload();
         console.log("Profile updated successfully");
     } catch (error) {
         console.error("Error updating profile:", error);
@@ -158,6 +159,7 @@ export const Form = ({userProfile,image}) => {
                         btnName="Upload profile"
                         handleClick={() => handleSubmit()}
                         classStyle="w-full flex justify-center text-[1.5rem]"
+                        type="button"
                     />
                 </div>
                 </form>
