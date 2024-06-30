@@ -25,11 +25,11 @@ export const Form = ({userProfile,image}) => {
         setAvatar(image);
     }, [image]);
     
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
     try {
-        updateUserProfile(name, email, avatar, description, youtube, facebook, twitter, instagram);
-        window.location.reload();
+        await updateUserProfile(name, email, avatar, description, youtube, facebook, twitter, instagram);
         console.log("Profile updated successfully");
+        window.location.reload();
     } catch (error) {
         console.error("Error updating profile:", error);
     }
