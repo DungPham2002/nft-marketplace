@@ -188,7 +188,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       const url = `https://beige-necessary-lobster-645.mypinata.cloud/ipfs/${response.data.IpfsHash}`;
       const createSaleNft = await createSale(url, price);
       if (createSaleNft) {
-        createNft(
+        await createNft(
           image,
           name,
           description,
@@ -326,7 +326,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           value: price,
         });
         await transaction.wait();
-        buyNft(currentAccount, nft.tokenId);
+        await buyNft(currentAccount, nft.tokenId);
         router.push("/author");
       }
     } catch (error) {
@@ -465,7 +465,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           duration
         );
         await transaction.wait();
-        listOnAuction(id, minBid, duration);
+        await listOnAuction(id, minBid, duration);
         router.push("/search");
       }
     } catch (error) {
@@ -480,7 +480,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         value: ethers.utils.parseEther(bidAmount),
       });
       await transaction.wait();
-      makeOffer(tokenId, bidAmount);
+      await makeOffer(tokenId, bidAmount);
     } catch (error) {
       console.log("Error placing bid", error);
     }
@@ -499,7 +499,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           console.log(`Ending auction for token ID ${auction.tokenId}`);
           const tx = await contract.endAuction(auction.tokenId);
           await tx.wait();
-          endBid(auction.tokenId);
+          await endBid(auction.tokenId);
           console.log(
             `Auction for token ID ${auction.tokenId} ended successfully`
           );
