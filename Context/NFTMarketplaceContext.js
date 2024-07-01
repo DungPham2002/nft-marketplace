@@ -511,13 +511,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (currentAccount) {
       const interval = setInterval(checkAndEndAuctions, 60000);
       checkAndEndAuctions();
       return () => {
         clearInterval(interval);
       };
-    }
   }, []);
 
   useEffect(() => {
