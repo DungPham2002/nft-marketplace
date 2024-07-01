@@ -162,7 +162,7 @@ export const NFTDescription = ({nft}) => {
             <div className="flex items-center gap-[2rem] pb-[1.5rem]">
               <div className="flex items-center self-center gap-[1rem]">
                 <Image
-                  src={authorProfile.avatar ||images.user1}
+                  src={authorProfile.user.avatar ||images.user1}
                   alt="profile"
                   width={40}
                   height={40}
@@ -172,7 +172,7 @@ export const NFTDescription = ({nft}) => {
                   <small className="font-medium text-[1rem]">Creator</small> <br />
                   <Link href={{ pathname: "/author", query: `${nft.seller}` }}>
                     <span className="font-extrabold flex items-center">
-                      {authorProfile.name || "UnName"} <MdVerified className="ml-[0.2rem]"/>
+                      {authorProfile.user.name || "UnName"} <MdVerified className="ml-[0.2rem]"/>
                     </span>
                   </Link>
                 </div>
