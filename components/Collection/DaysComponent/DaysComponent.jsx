@@ -55,7 +55,7 @@ export const DaysComponent = ({el, i}) => {
               <p className="flex">
                 Creator
                 <span className="px-[0.5rem] font-semibold flex items-center">
-                  Shoaib Bhai
+                  UnName
                   <small>
                     <MdVerified className="ml-[0.2rem]"/>
                   </small>
@@ -64,7 +64,7 @@ export const DaysComponent = ({el, i}) => {
             </div>
 
             <div className="p-[0.5rem] rounded-[0.5rem] font-semibold border-[3px] border-solid border-icons-color">
-              <small>1.255 ETH</small>
+              <small>0.001 ETH</small>
             </div>
           </div>
         </div>

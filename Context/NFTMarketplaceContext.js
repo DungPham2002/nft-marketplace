@@ -14,6 +14,9 @@ import { getUserProfile } from "@/api/user.api";
 import { buyNft, reSellNft, createNft } from "@/api/nft.api";
 import { listOnAuction } from "@/api/auction.api";
 import { endBid, makeOffer } from "@/api/auction.api";
+import { io } from "socket.io-client";
+import { SOCKET_URL } from "@/datas";
+
 
 const fetchContract = (signerOrProvider) =>
   new ethers.Contract(
@@ -128,10 +131,26 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   const logOut = () => {
     setCurrentAccount("");
-    localStorage.clear();
     getUserProfile().then((user) => {
       setUserProfile(user);
     });
+    const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        console.error('No access token found');
+        return;
+      }
+    const socket = io(`${SOCKET_URL}`, {
+      cor: { origin: ['*'] },
+      auth: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      transports: ['websocket'],
+    });
+    socket.on('disconnect', (reason) => {
+      console.log(`Disconnected: ${reason}`);
+    });
+    localStorage.clear();
+    window.location.reload();
     console.log("User signed out");
     return true;
   };

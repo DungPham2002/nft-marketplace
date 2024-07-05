@@ -15,13 +15,14 @@ export const Video = () => {
     
                 <div className="grid grid-cols-8 gap-[1rem] p-[5rem] mt-[6rem]">
                     <div className="col-start-1 col-end-8 row-start-1 row-end-[-1] z-[111]">
-                    <Image
-                        src={images.nftvideo}
+                    <iframe className="rounded-[1rem]" width="940" height="500" src="https://www.youtube.com/embed/brJ_mTASy2s?si=2UBtqDNQxZHbLSXn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    {/* <iframe
+                        src='https://www.youtube.com/watch?v=brJ_mTASy2s'
                         alt="Video image"
                         width={1920}
                         height={1080}
                         className="rounded-[1rem] object-cover"
-                    />
+                    /> */}
                     </div>
         
                     <div className="col-start-3 col-end-[-1] bg-icons-color rounded-[1rem] row-start-1 row-end-[-1] py-[3rem] px-0 mt-[-5rem] shadow-shadow">Hey</div>

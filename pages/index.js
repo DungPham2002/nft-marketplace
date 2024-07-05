@@ -53,18 +53,18 @@ export default function Home() {
       <BigNFTSlider NFTData={topAuctions}/>
       <FollowerTab TopCreator={creators}/>
       <Slider />
-      <Collection />
+      {/* <Collection /> */}
       <Title
-        heading="Featured NFTs"
-        paragraph="Discover the most outstanding NFTs in all topics of life."
+        heading="Trending"
+        paragraph="Explore trending NFT"
       />
       {/* <Filter /> */}
       <NFTCard NFTData={nfts}/>
-      <Title
+      {/* <Title
         heading="Browse by category"
         paragraph="Explore the NFTs in the most featured categories."
       />
-      <Category />
+      <Category /> */}
       <Subscribe />
       <Brand />
       <Video />

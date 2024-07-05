@@ -14,7 +14,6 @@ import { NFTMarketplaceContext } from "@/Context/NFTMarketplaceContext";
 import { useRouter } from "next/router";
 import { io } from "socket.io-client";
 import { getNotify } from "@/api/notification.api";
-import { updateNotify } from "@/api/notification.api";
 import { SOCKET_URL } from "@/datas";
 
 export const NavBar = () => {
@@ -27,7 +26,7 @@ export const NavBar = () => {
     const [unreadCount, setUnreadCount] = useState(0);
     const router = useRouter();
     const { currentAccount, userProfile } = useContext(NFTMarketplaceContext);
-  
+
     useEffect(() => {
       const fetchNotifications = async () => {
         try {
@@ -39,8 +38,10 @@ export const NavBar = () => {
           console.error('Error fetching notifications:', error);
         }
       };
-  
       fetchNotifications();
+    }, [userProfile]);
+  
+    useEffect(() => {
   
       const accessToken = localStorage.getItem('accessToken');
       if (!accessToken) {
@@ -57,10 +58,6 @@ export const NavBar = () => {
   
       socket.on('connect', () => {
         console.log('Connected to WebSocket server');
-      });
-  
-      socket.on('disconnect', (reason) => {
-        console.log(`Disconnected: ${reason}`);
       });
   
       socket.on('connect_error', (error) => {

@@ -207,11 +207,11 @@ export const NFTDescription = ({nft}) => {
                 >
                   <small className="text-[1.2rem] bg-icons-color text-main-bg p-[1rem] rounded-[0.5rem] ml-[2rem]">Current Bid</small>
                   <p className="p-[1rem] text-[1.5rem] font-black">
-                    {(nft.highestBid && nft.highestBid != 0) ? (nft.highestBid) : (nft.minBid) ? (nft.minBid) : (nft.price)} ETH <span>( ≈ $3,221.22)</span>
+                    {(nft.highestBid && nft.highestBid != 0) ? (nft.highestBid) : (nft.minBid) ? (nft.minBid) : (nft.price)} ETH
                   </p>
                 </div>
   
-                <span>[96 in stock]</span>
+                <span>[1 in stock]</span>
               </div>
   
               <div className="flex mt-[2rem] gap-[4rem]">

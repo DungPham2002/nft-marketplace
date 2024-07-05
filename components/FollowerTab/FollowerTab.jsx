@@ -77,15 +77,15 @@ export const FollowerTab = ({TopCreator}) => {
             <h2 className="text-[3rem] font-semibold mb-[4rem]"> Top Creators List..</h2>
             <div className="{Style.followerTab_tabs}">
                 <div className="flex bg-main-bg py-[0.5rem] px-[1rem] rounded-[4rem] justify-around gap-[1rem] items-center text-[1.2rem] shadow-shadow">
-                    <button className="p-[1rem] bg-icons-color text-main-bg border-[1px] border-solid border-icons-color rounded-[4rem] cursor-pointer transition-all ease-in hover:bg-[transparent] hover:text-icons-color flex" onClick={() => openPopular()}>
+                    <button className="p-[1rem] px-[2rem] bg-icons-color text-main-bg border-[1px] border-solid border-icons-color rounded-[4rem] cursor-pointer transition-all ease-in hover:bg-[transparent] hover:text-icons-color flex" onClick={() => openPopular()}>
                         <RiUserFollowFill className="mr-[0.2rem]"/> Popular
                     </button>
-                    <button className="p-[1rem] bg-icons-color text-main-bg border-[1px] border-solid border-icons-color rounded-[4rem] cursor-pointer transition-all ease-in hover:bg-[transparent] hover:text-icons-color flex" onClick={() => openFollower()}>
+                    <button className="p-[1rem] px-[2rem] bg-icons-color text-main-bg border-[1px] border-solid border-icons-color rounded-[4rem] cursor-pointer transition-all ease-in hover:bg-[transparent] hover:text-icons-color flex" onClick={() => openFollower()}>
                         <RiUserFollowFill className="mr-[0.2rem]"/> Follower
                     </button>
-                    <button className="p-[1rem] bg-icons-color text-main-bg border-[1px] border-solid border-icons-color rounded-[4rem] cursor-pointer transition-all ease-in hover:bg-[transparent] hover:text-icons-color flex" onClick={() => openNews()}>
+                    {/* <button className="p-[1rem] bg-icons-color text-main-bg border-[1px] border-solid border-icons-color rounded-[4rem] cursor-pointer transition-all ease-in hover:bg-[transparent] hover:text-icons-color flex" onClick={() => openNews()}>
                         <RiAwardLine className="mr-[0.2rem]"/> NoteWorthy
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>
