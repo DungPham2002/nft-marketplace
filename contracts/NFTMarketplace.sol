@@ -50,7 +50,6 @@ mapping(uint256 => Auction) private idToAuction;
         owner = payable(msg.sender);
     }
 
-    /* Updates the listing price of the contract */
     function updateListingPrice(uint256 _listingPrice) public payable {
         require(
             owner == msg.sender,
@@ -59,12 +58,10 @@ mapping(uint256 => Auction) private idToAuction;
         listingPrice = _listingPrice;
     }
 
-    /* Returns the listing price of the contract */
     function getListingPrice() public view returns (uint256) {
         return listingPrice;
     }
 
-    /* Mints a token and lists it in the marketplace */
     function createToken(string memory tokenURI, uint256 price)
         public
         payable
@@ -178,7 +175,6 @@ mapping(uint256 => Auction) private idToAuction;
     //     return items;
     // }
 
-    // /* Returns only items a user has listed */
     // function fetchItemsListed() public view returns (MarketItem[] memory) {
     //     uint256 totalItemCount = _tokenIds.current();
     //     uint256 itemCount = 0;

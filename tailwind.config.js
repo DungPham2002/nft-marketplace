@@ -15,6 +15,7 @@ module.exports = {
       },
     },
     colors: {
+      overlay: "#2323255e",
       icons: {
         color: "#4c5773",
         light: "#4c577341",

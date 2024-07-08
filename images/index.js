@@ -46,9 +46,11 @@ import nftvideo from "./nftvideo.png";
 import upload from "./upload.png"
 import provider1 from "./provider-1.png"
 import provider2 from "./provider-2.png"
+import error from "./error.jpg"
 
 
 export default {
+  error,
   collection,
   update,
   musiceWave,

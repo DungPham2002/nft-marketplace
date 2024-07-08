@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { io } from "socket.io-client";
 import { getNotify } from "@/api/notification.api";
 import { SOCKET_URL } from "@/datas";
+import { Error } from "../componentsindex";
 
 export const NavBar = () => {
     const [discover, setDiscover] = useState(false);
@@ -25,7 +26,7 @@ export const NavBar = () => {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const router = useRouter();
-    const { currentAccount, userProfile } = useContext(NFTMarketplaceContext);
+    const { currentAccount, userProfile, openError } = useContext(NFTMarketplaceContext);
 
     useEffect(() => {
       const fetchNotifications = async () => {
@@ -211,6 +212,8 @@ export const NavBar = () => {
             <SideBar setOpenSideBarMenu={setOpenSideBarMenu} />
           </div>
         )}
+
+        {openError && <Error/>}
       </div>
     );
   };

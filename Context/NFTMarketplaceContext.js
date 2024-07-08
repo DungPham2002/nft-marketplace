@@ -62,11 +62,13 @@ export const NFTMarketplaceProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [accountBalance, setAccountBalance] = useState("");
   const [userProfile, setUserProfile] = useState(null);
+  const [error, setError] = useState("");
+  const [openError, setOpenError] = useState(false);
   const router = useRouter();
 
   const checkIfWalletConnected = async () => {
     try {
-      if (!window.ethereum) return console.log("Install MetaMask");
+      if (!window.ethereum) return setOpenError(true), setError("Install MetaMask");
       const accounts = await window.ethereum.request({
         method: "eth_accounts",
       });
@@ -76,7 +78,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         if (accounts.length) {
           setCurrentAccount(accounts[0]);
         } else {
-          console.log("No account found");
+          setError("No account found");
+          setOpenError(true);
         }
       }
 
@@ -85,7 +88,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
       const bal = ethers.utils.formatEther(getBalance);
       setAccountBalance(bal);
     } catch (error) {
-      console.log("Something wrong when connecting wallet");
+      setError("Something wrong when connecting wallet");
+      setOpenError(true);
     }
   };
 
@@ -102,14 +106,16 @@ export const NFTMarketplaceProvider = ({ children }) => {
       setCurrentAccount(accounts[0]);
       signMessage(accounts[0]);
     } catch (error) {
-      console.log(error);
+      setError("Error when connecting wallet");
+      setOpenError(true);
     }
   };
 
   const signMessage = async (account) => {
     try {
       if (!window.ethereum) {
-        console.log("Install MetaMask");
+        setError("Install MetaMask");
+        setOpenError(true);
         return;
       }
 
@@ -125,7 +131,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
       router.push("/");
       console.log(`Signature for account ${account}:`, signature);
     } catch (error) {
-      console.log("Error signing message:", error);
+      setError("Error signing message");
+      setOpenError(true);
     }
   };
 
@@ -173,7 +180,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         const ImgHash = `https://beige-necessary-lobster-645.mypinata.cloud/ipfs/${response.data.IpfsHash}`;
         return ImgHash;
       } catch (error) {
-        console.log("Error when uploading to pinata");
+        setError("Error when uploading to pinata");
+        setOpenError(true);
       }
     }
   };
@@ -190,7 +198,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
     router
   ) => {
     if (!name || !description || !price || !image)
-      return console.log("Data is missing");
+      return setError("Data is missing"), setOpenError(true);
     const data = JSON.stringify({ name, description, image });
     try {
       const response = await axios({
@@ -224,7 +232,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         return false;
       }
     } catch (error) {
-      console.log("Error when creating nft", error);
+      setError("Error when creating nft");
+      setOpenError(true);
     }
   };
 
@@ -246,7 +255,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
       }
       return true;
     } catch (error) {
-      console.log("Error when creating sale", error);
+      setError("Error when creating sale");
+      setOpenError(true);
       return false;
     }
   };
@@ -287,7 +297,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         return items;
       }
     } catch (error) {
-      console.log("Error when fetching NFT", error);
+      setError("Error when fetching NFTs");
+      setOpenError(true);
     }
   };
 
@@ -349,7 +360,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         router.push("/author");
       }
     } catch (error) {
-      console.log("Error when buying NFT", error);
+      setError("Error when buying NFT");
+      setOpenError(true);
     }
   };
 
@@ -385,7 +397,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         window.location.reload();
       }
     } catch (error) {
-      console.log(error);
+      setError("Error when transfering Ether");
+      setOpenError(true);
     }
   };
 
@@ -410,7 +423,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         console.log("On Ethereum");
       }
     } catch (error) {
-      console.log("Error when getting all transactions");
+      setError("Error when getting all transactionas");
+      setOpenError(true);
     }
   };
 
@@ -463,7 +477,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
       );
       return activeAuctions;
     } catch (error) {
-      console.log("Error fetching active auctions", error);
+      setError("Error fetching active auctions");
+      setOpenError(true);
     }
   };
 
@@ -488,7 +503,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         router.push("/search");
       }
     } catch (error) {
-      console.log("Error creating auction", error);
+      setError("Error creating auction");
+      setOpenError(true);
     }
   };
 
@@ -501,7 +517,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
       await transaction.wait();
       await makeOffer(tokenId, bidAmount);
     } catch (error) {
-      console.log("Error placing bid", error);
+      setError("Error placing bid");
+      setOpenError(true);
     }
   };
 
@@ -525,7 +542,8 @@ export const NFTMarketplaceProvider = ({ children }) => {
         }
       }
     } catch (error) {
-      console.error("Error ending auction:", error);
+      setError("Error ending auction");
+      setOpenError(true);
     }
   };
 
@@ -566,6 +584,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
         createAuction,
         logOut,
         userProfile,
+        setOpenError,
+        openError,
+        error
       }}
     >
       {children}
