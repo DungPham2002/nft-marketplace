@@ -7,7 +7,7 @@ import { Button } from "@/components/componentsindex";
 
 
 export default function bidNFT() {
-    const {bidOnAuction} = useContext(NFTMarketplaceContext);
+    const {bidOnAuction, setError, setOpenError} = useContext(NFTMarketplaceContext);
     const [bidAmount, setBidAmount] = useState("");
     const [image, setImage] = useState("");
     const router = useRouter();
@@ -27,7 +27,8 @@ export default function bidNFT() {
             await bidOnAuction(id, bidAmount);
             router.push("/search");
         } catch (error) {
-            console.log("Error when resell nft", error);
+            setError("Error when resell nft");
+            setOpenError(true);
         }
 
     };

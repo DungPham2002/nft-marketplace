@@ -7,7 +7,7 @@ import { Button } from "@/components/componentsindex";
 
 
 export default function resellToken() {
-    const {createSale} = useContext(NFTMarketplaceContext);
+    const {createSale, setError, setOpenError} = useContext(NFTMarketplaceContext);
     const [price, setPrice] = useState("");
     const [image, setImage] = useState("");
     const router = useRouter();
@@ -27,7 +27,8 @@ export default function resellToken() {
             await createSale(tokenURI, price, true, id);
             router.push("/author");
         } catch (error) {
-            console.log("Error when resell nft", error);
+            setError("Error when resell nft");
+            setOpenError(true);
         }
 
     };

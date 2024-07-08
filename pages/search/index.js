@@ -17,6 +17,7 @@ export default function Search() {
     const [lowest, setLowest] = useState(false);
     const [oldest, setOldest] = useState(false);
     const [activeCollection, setActiveCollection] = useState(0);
+    const {setError, setOpenError} = useContext(NFTMarketplaceContext);
 
 
     const fetchNFTs = async () => {
@@ -27,7 +28,8 @@ export default function Search() {
           setNfts(nftItems);
           setNftCoppy(nftItems);
         } catch (error) {
-          console.error('Error fetching NFTs:', error);
+          setError('Error fetching NFTs');
+          setOpenError(true);
         }
       };
     
@@ -39,7 +41,8 @@ export default function Search() {
           setAuctionList(auctionItems);
           setAuctionCoppy(auctionItems);
         } catch (error) {
-          console.error('Error fetching Auctions:', error);
+          setError('Error fetching Auctions');
+          setOpenError(true);
         }
       };
     

@@ -7,7 +7,7 @@ import { Button } from "@/components/componentsindex";
 
 
 export default function auctionNFT() {
-    const {createAuction} = useContext(NFTMarketplaceContext);
+    const {createAuction, setError, setOpenError} = useContext(NFTMarketplaceContext);
     const [minBid, setMinBid] = useState("");
     const [image, setImage] = useState("");
     const [duration, setDuration] = useState("");
@@ -27,7 +27,8 @@ export default function auctionNFT() {
         try {
             await createAuction(id, minBid, duration);
         } catch (error) {
-            console.log("Error when create auction nft", error);
+            setError("Error when create auction nft");
+            setOpenError(true);
         }
 
     };
