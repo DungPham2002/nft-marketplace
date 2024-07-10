@@ -61,7 +61,7 @@ export const FollowerTabCardTwo = ({ i, el }) => {
             alt="profile picture"
             width={50}
             height={50}
-            src={el.avatar || images.user2}
+            src={el.avatar || images.user1}
           />
         </div>
 

@@ -88,8 +88,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       const bal = ethers.utils.formatEther(getBalance);
       setAccountBalance(bal);
     } catch (error) {
-      setError("Something wrong when connecting wallet");
-      setOpenError(true);
+      console.log("Something wrong when connecting wallet");
     }
   };
 
@@ -477,8 +476,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       );
       return activeAuctions;
     } catch (error) {
-      setError("Error fetching active auctions");
-      setOpenError(true);
+      console.log("Error fetching active auctions", error);
     }
   };
 
@@ -542,8 +540,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         }
       }
     } catch (error) {
-      setError("Error ending auction");
-      setOpenError(true);
+      console.log("Error ending auction", error);
     }
   };
 

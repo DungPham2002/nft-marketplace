@@ -36,7 +36,7 @@ export default function bidNFT() {
     return (
         <div className="w-full my-[4rem]">
             <div className="w-[60%] my-0 mx-auto">
-                <h1 className="font-bold text-[3rem]">ReSell Your Token, Set Price</h1>
+                <h1 className="font-bold text-[3rem]">Make offer, Set Price</h1>
                 <div className="mt-[2rem]">
                         <label className="block w-full ml-[1rem] font-bold text-[1.3rem]" htmlFor="name">Price</label>
                         <input
