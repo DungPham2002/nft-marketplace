@@ -25,7 +25,7 @@ export const SearchBar = ({ onHandleSearch, onClearSearch }) => {
         <input
           className="w-[85%] border-0 outline-[0] p-[2rem] bg-main-bg placeholder:text-icons-color placeholder:text-[1.2rem] text-icons-color"
           type="text"
-          placeholder="Type yout keyword..."
+          placeholder="Type your keyword..."
           onChange={(e) => setSearchItem(e.target.value)}
           value={searchItem}
         />

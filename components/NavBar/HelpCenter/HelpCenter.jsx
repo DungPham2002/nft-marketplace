@@ -10,18 +10,6 @@ export const HelpCenter = () => {
             name: "Contact Us",
             link: "contact-us"
         },
-        {
-            name: "Sign Up",
-            link: "signUp"
-        },
-        {
-            name: "Log In",
-            link: "login"
-        },
-        {
-            name: "Forgot password",
-            link: "forgot-password"
-        },
     ]
     return (
         <div className="">

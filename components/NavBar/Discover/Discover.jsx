@@ -3,11 +3,7 @@ import Link from "next/link"
 export const Discover = () => {
     const discover = [
         {
-            name: "Collection",
-            link: "collection"
-        },
-        {
-            name: "Search",
+            name: "Market",
             link: "search"
         },
         {

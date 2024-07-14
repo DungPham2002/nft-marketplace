@@ -396,8 +396,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         window.location.reload();
       }
     } catch (error) {
-      setError("Error when transfering Ether");
-      setOpenError(true);
+      console.log("Error when transfering Ether");
     }
   };
 
